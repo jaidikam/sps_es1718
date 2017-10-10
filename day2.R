@@ -41,14 +41,11 @@ r.cars <- mtcars
 #6)
 mtcars[grep("Merc", rownames(mtcars)),]
 
-#7
+#7-11
 dax.prices <- read.csv("./dax_prices.csv")
 str(dax.prices)
 dax.prices$DAXPrices <- dax.prices$DAX
 dax.prices$DAX <- NULL
 dax.prices$DAXPrices
-
-#8-11)
-
 write.table(dax.prices, "./daxprices.txt", append = FALSE, sep = ";", dec = ",",
             row.names = TRUE, col.names = TRUE)
