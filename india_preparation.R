@@ -6,10 +6,29 @@ rain <- read.csv(file=".\\rain_india.csv",head=TRUE,sep=";")
 temp <- read.csv(file=".\\temp_india.csv",head=TRUE,sep=";")
 prodcrops <- read.csv(file=".\\prodcrops_india.csv",head=TRUE,sep=";")
 daycal <- read.csv(file=".\\per_capita_calories_india.csv",head=TRUE,sep=";")
+exports <- read.csv(file=".\\india_exp.csv",head=TRUE,sep=";")
+imports <- read.csv(file=".\\india_imp.csv",head=TRUE,sep=";")
+agrigdp <- read.csv(file=".\\agri_gdp.csv",head=TRUE,sep=";")
+gni_pc <- read.csv(file=".\\gni_pc_india.csv",head=TRUE,sep=";")
+inflation <- read.csv(file=".\\inflation_india.csv",head=TRUE,sep=";")
+oilprice <- read.csv(file=".\\opec-oil-price-annually.csv",head=TRUE,sep=";")
+population <- read.csv(file=".\\population-india.csv",head=TRUE,sep=";")
 
-unique(data[data$adm0_name == 'India',]$cm_name)
+#replace commas with dots so we can convert to numeric
+rain$pr = as.numeric(gsub(",", ".", gsub("\\.", "", rain$pr)))
+temp$tas = as.numeric(gsub(",", ".", gsub("\\.", "", temp$tas)))
+exports$exp_sug = as.numeric(gsub(",", ".", gsub("\\.", "", exports$exp_sug)))
+exports$exp_veg = as.numeric(gsub(",", ".", gsub("\\.", "", exports$exp_veg)))
+exports$exp_cer = as.numeric(gsub(",", ".", gsub("\\.", "", exports$exp_sug)))
+imports$imp_sug = as.numeric(gsub(",", ".", gsub("\\.", "", imports$imp_sug)))
+imports$imp_veg = as.numeric(gsub(",", ".", gsub("\\.", "", imports$imp_veg)))
+imports$imp_cer = as.numeric(gsub(",", ".", gsub("\\.", "", imports$imp_cer)))
+agrigdp$agri_gdp = as.numeric(gsub(",", ".", gsub("\\.", "", agrigdp$agri_gdp)))
+gni_pc$gni_pc = as.numeric(gsub(",", ".", gsub("\\.", "", gni_pc$gni_pc)))
+inflation$cp_inflation = as.numeric(gsub(",", ".", gsub("\\.", "", inflation$cp_inflation)))
+oilprice$avg_p_barrel = as.numeric(gsub(",", ".", gsub("\\.", "", oilprice$avg_p_barrel)))
 
-unique(data$adm0_name)
+prodcrops$prod_amount_y = as.numeric(levels(prodcrops$prod_amount_y))[prodcrops$prod_amount_y]
 
 
 
@@ -104,10 +123,9 @@ temp[temp$month == c(1,2,3),]$q = 1
 temp[temp$month == c(4,5,6),]$q = 2
 temp[temp$month == c(7,8,9),]$q = 3
 temp[temp$month == c(10,11,12),]$q = 4
-#replace commas with dots so we can convert to numeric
-rain$pr = as.numeric(gsub(",", ".", gsub("\\.", "", rain$pr)))
-temp$tas = as.numeric(gsub(",", ".", gsub("\\.", "", temp$tas)))
 
+
+# average rain and temp per quarter
 for(z in 2001:2015){
   rain[rain$year == z ,]$pr_q1 = sum(rain[rain$year == z & rain$month == c(1,2,3),]$pr)/3
   rain[rain$year == z ,]$pr_q2 = sum(rain[rain$year == z & rain$month == c(4,5,6),]$pr)/3
@@ -126,24 +144,26 @@ india$avg_price_prod_month = NULL
 india = unique(india)
 
 
-
 india = merge(india,unique(rain[c("pr_q1","pr_q2","pr_q3","pr_q4","year")]),by=c("year")) 
 india = merge(india,unique(temp[c("tas_q1","tas_q2","tas_q3","tas_q4","year")]),by=c("year")) 
 india = merge(india,prodcrops[c("year","cm_name","prod_amount_y")],by=c("year","cm_name")) 
-india[india$prod_amount_y == "Na",]$prod_amount_y  <- NA
 india = merge(india,daycal[c("year","daily_caloric_supply")],by=c("year")) 
+india = merge(india,exports,by=c("year")) 
+india = merge(india,imports,by=c("year")) 
+india = merge(india,agrigdp,by=c("year"))
+india = merge(india,gni_pc,by=c("year"))
+india = merge(india,inflation ,by=c("year"))
+india = merge(india,oilprice  ,by=c("year"))
+india = merge(india,population  ,by=c("year"))
+
+
+
+
+
+
 
 #save our dataset for later
 saveRDS(india, (".\\india.rds"))
 
-foo = cor(india[,7:9], method = "pearson", use = "complete.obs")
-boo = rcorr(as.matrix(india[,7:9]))
-boo$P
-corrplot(foo, type = "upper", order = "hclust", 
-         tl.col = "black", tl.srt = 45)
 
-#weak correlation between price and rain, but not significant -> pvalue > 0.05 (~0.18)
-
-cor()
-summary(india)
 
