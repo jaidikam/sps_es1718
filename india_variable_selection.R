@@ -1,5 +1,45 @@
 if(!require("Hmisc")) install.packages("Hmisc"); library("Hmisc")
 if(!require("corrplot")) install.packages("corrplot"); library("corrplot")
+if(!require("caret")) install.packages("caret"); library("caret")
+
+#Write a little function
+removeVif<-function(explan_vars,cutoffval=10){
+  
+  if(!require("fmsb")) install.packages("fmsb"); library("fmsb")
+  tempresults = as.data.frame(matrix(ncol = 2, nrow = 0))
+  colnames(tempresults) = c("variable","vif")
+  #initially calculate VIF for each explanatory variable
+  for (i in 1:NROW(colnames(explan_vars)) ){
+    temptarget = colnames(explan_vars)[i]
+    tempexpvars = paste(colnames(explan_vars[,!(colnames(explan_vars) %in% temptarget)]),collapse = "+")
+    tempformula = paste(temptarget,"~", tempexpvars, collapse = " ")
+    
+    tempresults[i,1] = temptarget 
+    tempresults[i,2] = VIF(lm( tempformula,data = explan_vars))
+  }
+  print(tempresults[order(tempresults$vif),])
+  #remove variable with highest VIF, calculate new VIF for remaining variables until all VIF are below cutoff value
+  while(max(tempresults$vif) >= cutoffval){
+    tempresults = tempresults[!tempresults$vif == max(tempresults$vif),]
+    tempremvars = tempresults$variable
+    for(j in 1: NROW(tempremvars)){
+      temptarget = tempremvars[j]
+      tempexpvars = paste(tempremvars[!tempremvars %in% temptarget],collapse = "+")
+      tempformula = paste(temptarget,"~", tempexpvars, collapse = " ")
+      
+      tempresults[j,1] = temptarget 
+      tempresults[j,2] = VIF(lm( tempformula,data = explan_vars))
+    }
+    
+    print("Remaining variables:")
+    print(tempresults[order(tempresults$vif),])
+    cat("\n")
+    
+  }
+  return(tempresults$variable)
+}
+
+
 
 india = readRDS(".\\india.rds")
 indiafoods = unique(india$cm_name)
@@ -8,24 +48,30 @@ indiafoods = unique(india$cm_name)
 colselection = c("avg_price_prod_year","pr_q1","pr_q2","pr_q3","pr_q4","tas_q1","tas_q2","tas_q3","tas_q4",
                  "prod_amount_y","daily_caloric_supply","exp_sug","exp_veg","exp_cer","imp_sug","imp_veg","imp_cer", 
                  "agri_gdp","gni_pc","cp_inflation","avg_p_barrel","population") 
+target = c("avg_price_prod_year")
 normalized = as.data.frame(scale(india[colselection]))
 
-#2.Model with all variables 
-#2.1 print corrplot for all variables
+feats = normalized[, !(colnames(normalized) %in% target)]
 
+#2 Variable selection and modeling
+#2.1 Model with all explanatory variables 
+#2.1.1 print corrplot for all explanatory variables
 
-foo_insign = cor( normalized, method = "pearson", use = "complete.obs")
+foo_insign = cor( feats, method = "pearson", use = "complete.obs")
 corrplot(foo_insign, type = "upper", order = "hclust", 
          tl.col = "black", tl.srt = 45)
 
-#2.2 build model with all variables
+#2.1.2 build model with all explanatory variables
+expvarsall = paste(colnames(feats), collapse = '+')
+formulaall = paste(target,"~", expvarsall, collapse = " ")
+mod_varall = summary(lm(formulaall ,data = normalized))
 
-summary(lm(avg_price_prod_year ~ pr_q1 + pr_q2 + pr_q3 + pr_q4 + tas_q1 + tas_q2 + tas_q3 + tas_q4
-           + prod_amount_y + daily_caloric_supply + exp_sug + exp_veg + exp_cer + imp_sug + imp_veg + imp_cer
-           + agri_gdp + gni_pc + cp_inflation + avg_p_barrel + population ,data = normalized))
+#  Regression coeficcients have NAs, high R^2 but few signifikant predictors
+# => indicator for multicolinearity
+# we should remove some explanatory variables!
 
-#3.Model with all variables 
-#3.1 check correlation for statistically significant variables only (pvalue = 0,05)
+#2.2.Model with significant explanatory variables 
+#2.2.1 check pvalue for correlation target <=> explanatory variables (alpha = 0,05)
 
 boo = rcorr(as.matrix(normalized))
 
@@ -35,102 +81,50 @@ pvals = as.data.frame(boo$P)
 pvalsr = pvals[pvals$avg_price_prod_year < 5*10^-2,]
 vars = rownames(pvalsr)
 vars = vars[vars != "NA"]
-foo = cor(normalized[colnames(normalized) %in% vars | colnames(normalized) == "avg_price_prod_year" ], method = "pearson", use = "complete.obs")
+#vars = append(vars,"avg_price_prod_year")
+foo = cor(normalized[colnames(feats) %in% vars, ], method = "pearson", use = "complete.obs")
 corrplot(foo, type = "upper", order = "hclust", 
          tl.col = "black", tl.srt = 45)
 
-#3.2 build model with significant variables only
+#2.2.2 build model with significant explanatory variables only
+expvarssig = paste(vars, collapse = "+")
+formulasig = paste(target,"~",expvarssig,collapse ="+")
+mod_varsig = summary(lm(formulasig,data = normalized))
 
-summary(lm(avg_price_prod_year ~ pr_q1+ prod_amount_y +daily_caloric_supply + exp_sug
-           +exp_veg   + exp_cer + imp_sug + imp_veg +
-             +agri_gdp  + gni_pc +  cp_inflation + avg_p_barrel + population
-           ,data = normalized))
-
-
+#no more NAs in coefficients, still only one significant variable in lm model
 
 
 
 
-#4. model with produced amount and population only
-summary(lm(avg_price_prod_year ~ 
-           + prod_amount_y + population ,data = normalized))
+#2.3. model with produced amount and population only
+mod_varsmall = summary(lm(avg_price_prod_year ~ 
+              + prod_amount_y + population ,data = normalized))
 
-#5.multicolinearity removal
-# Every model so far has high R^2 but few signifikant predictors
-# => indicator for multicolinearity
+#according to oecd food prices (just like any other price...) should be mostly influenced by 
+#supply and demand. So if we just pick one supply related factor (produced amount) and one for demand
+#(population size) we find out, they are both significant. 
+#But R^2 is getting lower. There could be more to find out.
 
-#maybe VIF or manually, see function in bottom section
+#2.4.Stepwise approach to fight multicolinearity
+#2.4.1 Discovering highly correlated explanatory variables
 
-#6. model with variables left after multicolinearity removal
-summary(lm(avg_price_prod_year ~ 
-             tas_q3+ tas_q4 +  prod_amount_y 
-           + exp_sug + exp_veg + exp_cer + imp_cer + cp_inflation,data = normalized))
+hicorvars = findCorrelation(cor(feats), cutoff = 0.7)
+expvarsnohc = paste(colnames(feats[,-hicorvars]), collapse = "+")
+formulanohc = paste(target,"~",expvarsnohc,collapse = "+")
+mod_varnohc = summary(lm(formula(paste(target, '~', expvarsnohc)) ,data = normalized))
 
+#vegetable imports are sign of demand, produced amount is supply.
+#seems like we're getting somewhere but we threw away features known to be significant.
 
-#not mine, don't use officially!! unless adapted recreation.
+#2.4.2 Multicolinearity removal 
+# for highly correlated variables
+varslovifhc = removeVif(feats[,hicorvars],17) 
+# the rest
+varslovifnohc = removeVif(feats[,-hicorvars],17) 
+#2.3.4 Model without multicolinearity
+expvars_lovif = paste(paste(varslovifhc,collapse = "+"),"+",paste(varslovifnohc,collapse = "+"),collapse = "+")
+formula_lovif = paste(target,"~",expvars_lovif,collapse = "+")
+mod_varnohc = summary(lm(formula_lovif,data = normalized))
 
-vif_func<-function(in_frame,thresh=10,trace=T,...){
-  
-  library(fmsb)
-  
-  if(any(!'data.frame' %in% class(in_frame))) in_frame<-data.frame(in_frame)
-  
-  #get initial vif value for all comparisons of variables
-  vif_init<-NULL
-  var_names <- names(in_frame)
-  for(val in var_names){
-    regressors <- var_names[-which(var_names == val)]
-    form <- paste(regressors, collapse = '+')
-    form_in <- formula(paste(val, '~', form))
-    vif_init<-rbind(vif_init, c(val, VIF(lm(form_in, data = in_frame, ...))))
-  }
-  vif_max<-max(as.numeric(vif_init[,2]), na.rm = TRUE)
-  
-  if(vif_max < thresh){
-    if(trace==T){ #print output of each iteration
-      prmatrix(vif_init,collab=c('var','vif'),rowlab=rep('',nrow(vif_init)),quote=F)
-      cat('\n')
-      cat(paste('All variables have VIF < ', thresh,', max VIF ',round(vif_max,2), sep=''),'\n\n')
-    }
-    return(var_names)
-  }
-  else{
-    
-    in_dat<-in_frame
-    
-    #backwards selection of explanatory variables, stops when all VIF values are below 'thresh'
-    while(vif_max >= thresh){
-      
-      vif_vals<-NULL
-      var_names <- names(in_dat)
-      
-      for(val in var_names){
-        regressors <- var_names[-which(var_names == val)]
-        form <- paste(regressors, collapse = '+')
-        form_in <- formula(paste(val, '~', form))
-        vif_add<-VIF(lm(form_in, data = in_dat, ...))
-        vif_vals<-rbind(vif_vals,c(val,vif_add))
-      }
-      max_row<-which(vif_vals[,2] == max(as.numeric(vif_vals[,2]), na.rm = TRUE))[1]
-      
-      vif_max<-as.numeric(vif_vals[max_row,2])
-      
-      if(vif_max<thresh) break
-      
-      if(trace==T){ #print output of each iteration
-        prmatrix(vif_vals,collab=c('var','vif'),rowlab=rep('',nrow(vif_vals)),quote=F)
-        cat('\n')
-        cat('removed: ',vif_vals[max_row,1],vif_max,'\n\n')
-        flush.console()
-      }
-      
-      in_dat<-in_dat[,!names(in_dat) %in% vif_vals[max_row,1]]
-      
-    }
-    
-    return(names(in_dat))
-    
-  }
-  
-}
-vif_func(normalized[,!colnames(normalized) %in%c("avg_price_prod_year")])
+#
+
