@@ -66,7 +66,7 @@ expvarsall = paste(colnames(feats), collapse = '+')
 formulaall = paste(target,"~", expvarsall, collapse = " ")
 mod_varall = summary(lm(formulaall ,data = normalized))
 
-#  Regression coeficcients have NAs, high R^2 but few signifikant predictors
+#  Regression coefficients have NAs, high R^2 but few signifikant predictors
 # => indicator for multicolinearity
 # we should remove some explanatory variables!
 
@@ -111,7 +111,7 @@ mod_varsmall = summary(lm(avg_price_prod_year ~
 hicorvars = findCorrelation(cor(feats), cutoff = 0.7)
 expvarsnohc = paste(colnames(feats[,-hicorvars]), collapse = "+")
 formulanohc = paste(target,"~",expvarsnohc,collapse = "+")
-mod_varnohc = summary(lm(formula(paste(target, '~', expvarsnohc)) ,data = normalized))
+mod_varnohc = summary(lm(paste(target, '~', expvarsnohc) ,data = normalized))
 
 #vegetable imports are sign of demand, produced amount is supply.
 #seems like we're getting somewhere but we threw away features known to be significant.
