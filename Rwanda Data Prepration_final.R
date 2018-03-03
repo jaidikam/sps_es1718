@@ -239,7 +239,6 @@ data$daily_caloric_supply[data$Year == "2015"] <- mean(unique(data$daily_caloric
 ##################################################################################################################################
 
 saveRDS(data, "Rwanda.rds")
-d <- readRDS("Rwanda.rds")
 
 
 
