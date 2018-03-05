@@ -101,40 +101,11 @@ Production_amount <- Production_amount[, c("Year", "Item", "Value")]
 colnames(Production_amount)[3] <- "Production Amount"
 data <- merge(x = data, y = Production_amount, by= c("Year", "Item"), all.x = TRUE)
 
-###################################################################################################
-
-### Food supply kcal/capita/day 
-
-# Source: http://www.fao.org/faostat/en/#data/OA
-food_supply <- read.csv("Food supply.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
-food_supply$Item[food_supply$Item == "Beans"] <- "Beans, dry"
-food_supply$Item[food_supply$Item == "Cassava and products"] <- "Cassava"
-food_supply$Item[food_supply$Item == "Maize and products"] <- "Maize"
-food_supply$Item[food_supply$Item == "Potatoes and products"] <- "Potatoes"
-food_supply$Item[food_supply$Item == "Rice (Milled Equivalent)"] <- "Rice, paddy"
-
-food_supply <- food_supply[, c("Year", "Item", "Value")]
-colnames(food_supply)[3] <- "Food Supply"
-data <- merge(x = data, y = food_supply, by= c("Year", "Item"), all.x = TRUE)
-
-# we have data only until 2013. for 2014 and 2015 we have NA values, we replace them with the mean for each respected product 
-mean_food_supply <- vector(mode = "double")
-for(i in unique(food_supply$Item)){
-  mean_food_supply[i] <- mean(food_supply$`Food Supply`[food_supply$Item == i])
-}
-
-data$`Food Supply`[is.na(data$`Food Supply`) == TRUE & data$Item == "Rice, paddy"] <- mean_food_supply["Rice, paddy"]
-data$`Food Supply`[is.na(data$`Food Supply`) == TRUE & data$Item == "Maize"] <- mean_food_supply["Maize"]
-data$`Food Supply`[is.na(data$`Food Supply`) == TRUE & data$Item == "Cassava"] <- mean_food_supply["Cassava"]
-data$`Food Supply`[is.na(data$`Food Supply`) == TRUE & data$Item == "Potatoes"] <- mean_food_supply["Potatoes"]
-data$`Food Supply`[is.na(data$`Food Supply`) == TRUE & data$Item == "Sweet potatoes"] <- mean_food_supply["Sweet potatoes"]
-data$`Food Supply`[is.na(data$`Food Supply`) == TRUE & data$Item == "Beans, dry"] <- mean_food_supply["Beans, dry"]
-data$`Food Supply`[is.na(data$`Food Supply`) == TRUE & data$Item == "Bananas"] <- mean_food_supply["Bananas"]
 
 #################################################################################################
-
+# same as Ben 
 # GNI per capita, Atlas method (current US$)
-# https://data.worldbank.org/indicator/NY.GNP.PCAP.CD
+# https://data.worldbank.org/indicator/NY.GNP.PCAP.KD?locations=RW
 GNI <- read.csv("GNI.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 GNI <- GNI[GNI$Country.Name == "Rwanda",]
 GNI[1:35] <- NULL
@@ -171,8 +142,9 @@ colnames(GDP) <- c("Year", "GDP")
 data <- merge(x = data, y = GDP, by= "Year", all.x = TRUE)
 
 ##################################################################################################
+# same as Ben
 # Inflation, GDP deflator (annual %)
-# https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG
+# https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG?locations=RW
 Inflation <- read.csv("Inflation.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 Inflation <- Inflation[Inflation$Country.Name == "Rwanda",]
 Inflation[1:35] <- NULL
@@ -182,23 +154,98 @@ Inflation <- as.data.frame(t(Inflation))
 setDT(Inflation, keep.rownames = TRUE)[]
 
 colnames(Inflation) <- c("Year", "Inflation")
+# the inflation data for the year 1994, 1995 where missing so we got them from another source: http://rwanda.opendataforafrica.org/rjirstd/cpi-by-country-statistics?country=Rwanda 
+Inflation$Inflation[Inflation$Year == "1994"] <- 21.0
+Inflation$Inflation[Inflation$Year == "1995"] <- 56.0
 data <- merge(x = data, y = Inflation, by= "Year", all.x = TRUE)
 
 ####################################################################################################
+# same as Ben
 # Agriculture GDP
-# Agriculture, value added (% of GDP)
-# https://data.worldbank.org/indicator/NV.AGR.TOTL.ZS
+# Agriculture, value added (constant 2010 US$)
+# https://data.worldbank.org/indicator/NV.AGR.TOTL.KD?locations=RW
 
-# Agriculture_GDP <- read.csv("Agriculture GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
-# Agriculture_GDP <- Agriculture_GDP[Agriculture_GDP$Country.Name == "Rwanda",]
-# Agriculture_GDP[1:35] <- NULL
-# Agriculture_GDP[c("X2016","X2017", "X")] <- NULL
-# colnames(Agriculture_GDP) <- c("1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015")
-# Agriculture_GDP <- as.data.frame(t(Agriculture_GDP))
-# setDT(Agriculture_GDP, keep.rownames = TRUE)[]
-# 
-# colnames(Agriculture_GDP) <- c("Year", "Agriculture_GDP")
-# data <- merge(x = data, y = Agriculture_GDP, by= "Year", all.x = TRUE)
+Agriculture_GDP <- read.csv("Agriculture GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Agriculture_GDP <- Agriculture_GDP[Agriculture_GDP$Country.Name == "Rwanda",]
+Agriculture_GDP[1:35] <- NULL
+Agriculture_GDP[c("X2016","X2017", "X")] <- NULL
+colnames(Agriculture_GDP) <- c("1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015")
+Agriculture_GDP <- as.data.frame(t(Agriculture_GDP))
+setDT(Agriculture_GDP, keep.rownames = TRUE)[]
 
-saveRDS(data, ("Rwanda.rds"))
+colnames(Agriculture_GDP) <- c("Year", "Agriculture_GDP")
+data <- merge(x = data, y = Agriculture_GDP, by= "Year", all.x = TRUE)
+
+##################################################################################################
+
+# reading the import and export data for vegetables and Cereals
+# Source: http://rwanda.opendataforafrica.org/UNCTADMTMEIWCG2017/merchandise-trade-matrix-product-groups-exports-and-imports-in-thousands-of-dollars-annual-1995-2016
+# thousand USD
+Vegetables <- read.csv("Vegetables.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Cereals <- read.csv("Cereal.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+colnames(Vegetables)[6] <- "Year"
+colnames(Cereals)[6] <- "Year"
+veg_import <- Vegetables[Vegetables$flow == "Imports",c("Year", "Value")]
+colnames(veg_import)[2] <- "imp_veg"
+veg_export <- Vegetables[Vegetables$flow == "Exports",c("Year", "Value")]
+colnames(veg_export)[2] <- "exp_veg"
+cer_import <- Cereals[Cereals$flow == "Imports",c("Year", "Value")]
+colnames(cer_import)[2] <- "imp_cer"
+cer_export <- Cereals[Cereals$flow == "Exports",c("Year", "Value")]
+colnames(cer_export)[2] <- "exp_cer"
+india <- readRDS("india.rds")
+
+data <- merge(x = data, y = veg_export, by= "Year", all.x = TRUE)
+data <- merge(x = data, y = cer_export, by= "Year", all.x = TRUE)
+data <- merge(x = data, y = veg_import, by= "Year", all.x = TRUE)
+data <- merge(x = data, y = cer_import, by= "Year", all.x = TRUE)
+
+# now we have the import and export data is empty between 1991 - 1994, we will take the mean of each of the fllowing five years 
+
+data$exp_veg[data$Year == "1991"] <- mean(unique(data$exp_veg[data$Year %in% c("1995", "1996", "1997", "1998", "1999")]))
+data$imp_veg[data$Year == "1991"] <- mean(unique(data$imp_veg[data$Year %in% c("1995", "1996", "1997", "1998", "1999")]))
+data$imp_cer[data$Year == "1991"] <- mean(unique(data$imp_cer[data$Year %in% c("1995", "1996", "1997", "1998", "1999")]))
+data$exp_cer[data$Year == "1991"] <- mean(unique(data$exp_cer[data$Year %in% c("1995", "1996", "1997", "1998", "1999")]))
+
+data$exp_veg[data$Year == "1992"] <- mean(unique(data$exp_veg[data$Year %in% c("1996", "1997", "1998", "1999", "2000")]))
+data$imp_veg[data$Year == "1992"] <- mean(unique(data$imp_veg[data$Year %in% c("1996", "1997", "1998", "1999", "2000")]))
+data$imp_cer[data$Year == "1992"] <- mean(unique(data$imp_cer[data$Year %in% c("1996", "1997", "1998", "1999", "2000")]))
+data$exp_cer[data$Year == "1992"] <- mean(unique(data$exp_cer[data$Year %in% c("1996", "1997", "1998", "1999", "2000")]))
+
+data$exp_veg[data$Year == "1993"] <- mean(unique(data$exp_veg[data$Year %in% c("1997", "1998", "1999", "2000", "2001")]))
+data$imp_veg[data$Year == "1993"] <- mean(unique(data$imp_veg[data$Year %in% c("1997", "1998", "1999", "2000", "2001")]))
+data$imp_cer[data$Year == "1993"] <- mean(unique(data$imp_cer[data$Year %in% c("1997", "1998", "1999", "2000", "2001")]))
+data$exp_cer[data$Year == "1993"] <- mean(unique(data$exp_cer[data$Year %in% c("1997", "1998", "1999", "2000", "2001")]))
+
+data$exp_veg[data$Year == "1994"] <- mean(unique(data$exp_veg[data$Year %in% c("1998", "1999", "2000", "2001", "2002")]))
+data$imp_veg[data$Year == "1994"] <- mean(unique(data$imp_veg[data$Year %in% c("1998", "1999", "2000", "2001", "2002")]))
+data$imp_cer[data$Year == "1994"] <- mean(unique(data$imp_cer[data$Year %in% c("1998", "1999", "2000", "2001", "2002")]))
+data$exp_cer[data$Year == "1994"] <- mean(unique(data$exp_cer[data$Year %in% c("1998", "1999", "2000", "2001", "2002")]))
+
+###################################################################################################################################
+
+# Average daily per capita caloric supply, measured in kilocalories per person per day. 
+# Source: https://ourworldindata.org/food-per-person
+dpccs <- read.csv("daily-per-capita-caloric-supply.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+dpccs <- dpccs[dpccs$Entity == "Rwanda", c("Year","X.kcal.person.day.")]
+colnames(dpccs)[2] <- "daily_caloric_supply"
+data <- merge(x = data, y = dpccs, by= "Year", all.x = TRUE)
+
+# 2014 and 2015 there is no data, replace with median 
+data$daily_caloric_supply[data$Year == "2014"] <- mean(unique(data$daily_caloric_supply[data$Year %in% c("2012", "2011", "2010", "2009", "2008")]))
+data$daily_caloric_supply[data$Year == "2015"] <- mean(unique(data$daily_caloric_supply[data$Year %in% c("2013" ,"2012", "2011", "2010", "2009")]))
+                                                              
+
+##################################################################################################################################
+
+saveRDS(data, "Rwanda.rds")
+
+
+
+
+
+
+
+
+
 
