@@ -19,7 +19,7 @@ removeVif<-function(explan_vars,cutoffval=10){
   }
   print(tempresults[order(tempresults$vif),])
   #remove variable with highest VIF, calculate new VIF for remaining variables until all VIF are below cutoff value
-  while(max(tempresults$vif) >= cutoffval){
+    while(max(tempresults$vif) >= cutoffval){
     tempresults = tempresults[!tempresults$vif == max(tempresults$vif),]
     tempremvars = tempresults$variable
     for(j in 1: NROW(tempremvars)){
@@ -59,7 +59,7 @@ feats = normalized[, !(colnames(normalized) %in% target)]
 
 foo_insign = cor( feats, method = "pearson", use = "complete.obs")
 corrplot(foo_insign, type = "upper", order = "hclust", 
-         tl.col = "black", tl.srt = 45)
+          tl.col = "black", tl.srt = 45)
 
 #2.1.2 build model with all explanatory variables
 expvarsall = paste(colnames(feats), collapse = '+')
@@ -74,9 +74,7 @@ mod_varall = summary(lm(formulaall ,data = normalized))
 #2.2.1 check pvalue for correlation target <=> explanatory variables (alpha = 0,05)
 
 boo = rcorr(as.matrix(normalized))
-
 cors <- as.data.frame(boo$r)
-
 pvals = as.data.frame(boo$P) 
 pvalsr = pvals[pvals$avg_price_prod_year < 5*10^-2,]
 vars = rownames(pvalsr)
@@ -105,26 +103,29 @@ mod_varsmall = summary(lm(avg_price_prod_year ~
 #(population size) we find out, they are both significant. 
 #But R^2 is getting lower. There could be more to find out.
 
-#2.4.Stepwise approach to fight multicolinearity
+#2.4.Stepwise approach to tackle multicolinearity
 #2.4.1 Discovering highly correlated explanatory variables
 
-hicorvars = findCorrelation(cor(feats), cutoff = 0.7)
+hicorvars = findCorrelation(cor(feats), cutoff = 0.70)
 expvarsnohc = paste(colnames(feats[,-hicorvars]), collapse = "+")
 formulanohc = paste(target,"~",expvarsnohc,collapse = "+")
-mod_varnohc = summary(lm(paste(target, '~', expvarsnohc) ,data = normalized))
+mod_varnohc = summary(lm(formulanohc,data = normalized))
 
 #vegetable imports are sign of demand, produced amount is supply.
 #seems like we're getting somewhere but we threw away features known to be significant.
+#the model still has high adjusted R^2
 
 #2.4.2 Multicolinearity removal 
 # for highly correlated variables
-varslovifhc = removeVif(feats[,hicorvars],17) 
+varslovifhc = removeVif(feats[,hicorvars],8) 
 # the rest
-varslovifnohc = removeVif(feats[,-hicorvars],17) 
+varslovifnohc = removeVif(feats[,-hicorvars],8) 
 #2.3.4 Model without multicolinearity
 expvars_lovif = paste(paste(varslovifhc,collapse = "+"),"+",paste(varslovifnohc,collapse = "+"),collapse = "+")
 formula_lovif = paste(target,"~",expvars_lovif,collapse = "+")
-mod_varnohc = summary(lm(formula_lovif,data = normalized))
+mod_lovif = summary(lm(formula_lovif,data = normalized))
 
-#
+##just as stated by oecd, supply (produced amount) and demand (population size) are the significant
+#factors for food prices.
+#R^2 is similar to the model built without all highly correlated variables
 
