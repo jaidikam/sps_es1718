@@ -99,7 +99,7 @@ data = merge(data,unique(temp[c("tas_q1","tas_q2","tas_q3","tas_q4","Year")]),by
 ### read the oil prices data
 
 # Source: https://www.statista.com/statistics/262858/change-in-opec-crude-oil-prices-since-1960/
-oil_prices <- read.csv("Oil prices.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
+oil_prices <- read.csv("OilPrices.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
 colnames(oil_prices) <- c("Year", "oil_avarage_price_per_barrel")
 
 oil_prices$oil_avarage_price_per_barrel = as.numeric(gsub(",", ".", gsub("\\.", "", oil_prices$oil_avarage_price_per_barrel)))
@@ -122,7 +122,7 @@ data <- merge(x = data, y = population, by= "Year", all.x = TRUE)
 ### Production Amount
 
 # Source: http://www.fao.org/faostat/en/#data/OA
-Production_amount <- read.csv("Production Amount.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Production_amount <- read.csv("ProductionAmount.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 Production_amount <- Production_amount[, c("Year", "Item", "Value")]
 colnames(Production_amount)[3] <- "Production Amount"
 
@@ -156,7 +156,7 @@ data <- merge(x = data, y = GNI, by= "Year", all.x = TRUE)
 # Exchange rate
 # Source: http://www.fao.org/faostat/en/#data/OA
 
-exchange_rate <- read.csv("Exchange rate.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+exchange_rate <- read.csv("ExchangeRate.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 exchange_rate <- exchange_rate[, c("Year", "Value")]
 colnames(exchange_rate)[2] <- "Exchange Rate"
 data <- merge(x = data, y = exchange_rate, by= "Year", all.x = TRUE)
@@ -200,7 +200,7 @@ data <- merge(x = data, y = Inflation, by= "Year", all.x = TRUE)
 # Agriculture, value added (constant 2010 US$)
 # https://data.worldbank.org/indicator/NV.AGR.TOTL.KD?locations=RW
 
-Agriculture_GDP <- read.csv("Agriculture GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Agriculture_GDP <- read.csv("AgricultureGDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 Agriculture_GDP <- Agriculture_GDP[Agriculture_GDP$Country.Name == "Philippines",]
 Agriculture_GDP[1:35] <- NULL
 Agriculture_GDP[c("X2016","X2017", "X")] <- NULL
@@ -266,5 +266,5 @@ data$daily_caloric_supply[data$Year == "2015"] <- mean(unique(data$daily_caloric
 
 data1 <- data[complete.cases(data),]
 
-saveRDS(data1, "Philippines.rds")
+saveRDS(data1, "Philippines1.rds")
 
