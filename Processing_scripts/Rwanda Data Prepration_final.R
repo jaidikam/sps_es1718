@@ -1,4 +1,5 @@
-setwd("C:/Users/Raiber/Desktop/SPL 2")
+setwd("C:/Users/Raiber/Desktop/HU Lectures/Statistical Programming/sps_ws1718/Rwanda datasets")
+#setwd(".\\Rwanda datasets\")
 library(data.table)
 if(!require("plyr")) install.packages("plyr"); library("plyr")
 if(!require("Hmisc")) install.packages("Hmisc"); library("Hmisc")
