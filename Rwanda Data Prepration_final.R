@@ -1,4 +1,5 @@
-setwd("C:/Users/Raiber/Desktop/SPL 2")
+setwd("C:/Users/Raiber/Desktop/HU Lectures/Statistical Programming/sps_ws1718/Rwanda datasets")
+#setwd(".\\Rwanda datasets\")
 library(data.table)
 if(!require("plyr")) install.packages("plyr"); library("plyr")
 if(!require("Hmisc")) install.packages("Hmisc"); library("Hmisc")
@@ -293,7 +294,7 @@ ggplot(plotd, aes(Item, perc)) +
 ######################################################################################################
 
 world_population = read.csv("World Population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
-world_population = world_population[world_population$ï..Country.Name == "World",]
+world_population = world_population[world_population$?..Country.Name == "World",]
 
 world_population[1:35] = NULL
 world_population[c("X2016","X2017", "X")] = NULL
