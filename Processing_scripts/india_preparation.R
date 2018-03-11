@@ -1,5 +1,4 @@
-#if(!require("Hmisc")) install.packages("Hmisc"); library("Hmisc")
-source(".\\all_countries_preparation.R")
+source(".\\Helper_functions\\preparation_functions.R")
 
 data <- read.csv(file=".\\wfp_market_food_prices.csv",head=TRUE,sep=",")
 rain <- read.csv(file=".\\rain_india.csv",head=TRUE,sep=";")
@@ -114,9 +113,9 @@ india = merge(india,population  ,by=c("year"))
 
 
 
-
 #save our dataset for later
-saveRDS(india, (".\\india.rds"))
-
+saveRDS(india, (".\\Processed_ds\\india_fin.rds"))
+#cleanup
+rm(list = setdiff(ls(), lsf.str()))
 
 

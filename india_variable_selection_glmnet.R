@@ -1,7 +1,8 @@
-if(!require("glmnet")) install.packages("glmnet"); library("glmnet")
 library(ggfortify)
 library(caret)
 library("plotmo")
+
+source(".\\Helper_functions\\variable_selection_functions.R")
 
 #the bigger t, our cutoff value, the smaller λ, the shrinkage, gets
 

@@ -240,7 +240,7 @@ data$daily_caloric_supply[data$Year == "2015"] = mean(unique(data$daily_caloric_
 
 ##################################################################################################################################
 
-saveRDS(data, "Rwanda.rds")
+saveRDS(data, ".\\Processed_ds\\rwanda_fin.rds")
 
 ####################################################################################################################
 
@@ -293,7 +293,7 @@ ggplot(plotd, aes(Item, perc)) +
 ######################################################################################################
 
 world_population = read.csv("World Population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
-world_population = world_population[world_population$ï..Country.Name == "World",]
+world_population = world_population[world_population$?..Country.Name == "World",]
 
 world_population[1:35] = NULL
 world_population[c("X2016","X2017", "X")] = NULL
@@ -344,7 +344,8 @@ p_all <- p_all[p_all$Area == "World",]
 
 
 
-
+#cleanup
+rm(list = setdiff(ls(), lsf.str()))
 
 
 
