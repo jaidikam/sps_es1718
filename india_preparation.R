@@ -1,5 +1,5 @@
-if(!require("Hmisc")) install.packages("Hmisc"); library("Hmisc")
-if(!require("corrplot")) install.packages("corrplot"); library("corrplot")
+#if(!require("Hmisc")) install.packages("Hmisc"); library("Hmisc")
+source(".\\all_countries_preparation.R")
 
 data <- read.csv(file=".\\wfp_market_food_prices.csv",head=TRUE,sep=",")
 rain <- read.csv(file=".\\rain_india.csv",head=TRUE,sep=";")
@@ -40,7 +40,7 @@ prodcrops$prod_amount_y = as.numeric(levels(prodcrops$prod_amount_y))[prodcrops$
 indiafoods = c("Sugar","Rice","Wheat","Potatoes")
 india = data[data$adm0_name == 'India' & data$mp_year >= 2001,]
 india = india[india$cm_name %in% indiafoods, ]
-
+india$cm_name = as.character(india$cm_name)
 
 #calculate average price per food per month for the whole country
 india =avgPriceFoodMonth(india,"cm_name","mp_price","mp_year","mp_month")
