@@ -71,20 +71,3 @@ coef(fit, s = "lambda.min")
 lambda.1se = which(fit$lambda == fit$lambda.1se)
 coef(fit, s = "lambda.1se")
 fit$glmnet.fit$beta[, which(fit$lambda == fit$lambda.1se)]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
