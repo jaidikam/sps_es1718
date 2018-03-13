@@ -27,17 +27,61 @@ feats_rw = normalized_rw[, !(colnames(normalized_rw) %in% target_rw)]
 #Model with all explanatory variables 
 insign_in = cor( feats_in, method = "pearson", use = "complete.obs")
 insign_rw = cor( feats_rw, method = "pearson", use = "complete.obs")
-#print corrplot for all explanatory variables
-corrplot(insign_in, type = "upper", order = "hclust", 
-         tl.col = "black", tl.srt = 45)
 
 
 
 
+# Discovering highly correlated explanatory variables
+hicorvars_in = findCorrelation(cor(feats_in), cutoff = 0.70)
+expvarsnohc_in = paste(colnames(feats_in[,-hicorvars_in]), collapse = "+")
+formulanohc_in = paste(target_in,"~",expvarsnohc_in,collapse = "+")
+mod_varnohc_in = lm(formulanohc_in,data = normalized_in)
+
+hicorvars_rw = findCorrelation(cor(feats_rw), cutoff = 0.70)
+expvarsnohc_rw = paste(colnames(feats_rw[,-hicorvars_rw]), collapse = "+")
+formulanohc_rw = paste(target_rw,"~",expvarsnohc_rw,collapse = "+")
+mod_varnohc_rw = lm(formulanohc_rw,data = normalized_rw)
+
+
+#Multicolinearity removal 
+# for highly correlated variables
+varslovifhc_in = removeVif(feats_in[,hicorvars_in],8) 
+varslovifhc_rw = removeVif(feats_rw[,hicorvars_rw],8) 
+# the rest
+varslovifnohc_in = removeVif(feats_in[,-hicorvars_in],8) 
+varslovifnohc_rw = removeVif(feats_rw[,-hicorvars_rw],8) 
+#Model without multicolinearity
+expvars_lovif_in = paste(paste(varslovifhc_in,collapse = "+"),"+",paste(varslovifnohc_in,collapse = "+"),collapse = "+")
+formula_lovif_in = paste(target_in,"~",expvars_lovif_in,collapse = "+")
+mod_lovif_in = lm(formula_lovif_in,data = normalized_in)
+expvars_lovif_rw = paste(paste(varslovifhc_rw,collapse = "+"),"+",paste(varslovifnohc_rw,collapse = "+"),collapse = "+")
+formula_lovif_rw = paste(target_rw,"~",expvars_lovif_rw,collapse = "+")
+mod_lovif_rw = lm(formula_lovif_rw,data = normalized_rw)
 
 #save results
-savestring = paste0(deparse(substitute(india)),"_correlations_raw.rds")
+savesuffix = deparse(substitute(insign_in))
+savestring = paste0(savesuffix,".rds")
 saveRDS(insign_in, (paste0(".\\Results\\",savestring)))
 
-savestring = paste0(deparse(substitute(rwanda)),"_correlations_raw.rds")
+savesuffix = deparse(substitute(mod_varnohc_in))
+savestring = paste0(savesuffix,".rds")
+saveRDS(mod_varnohc_in, (paste0(".\\Results\\",savestring)))
+
+savesuffix = deparse(substitute(mod_lovif_in))
+savestring = paste0(savesuffix,".rds")
+saveRDS(mod_lovif_in, (paste0(".\\Results\\",savestring)))
+
+savesuffix = deparse(substitute(insign_rw))
+savestring = paste0(savesuffix,".rds")
 saveRDS(insign_rw, (paste0(".\\Results\\",savestring)))
+
+savesuffix = deparse(substitute(mod_varnohc_rw))
+savestring = paste0(savesuffix,".rds")
+saveRDS(mod_varnohc_rw, (paste0(".\\Results\\",savestring)))
+
+savesuffix = deparse(substitute(mod_lovif_rw))
+savestring = paste0(savesuffix,".rds")
+saveRDS(mod_lovif_rw, (paste0(".\\Results\\",savestring)))
+
+#cleanup
+rm(list = setdiff(ls(), lsf.str()))
