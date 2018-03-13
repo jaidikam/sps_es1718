@@ -1,6 +1,4 @@
-wdir <- "/Users/Stefan/sps_ws1718"
-setwd(wdir)
-getwd()
+
 
 
 library(data.table)
@@ -12,7 +10,7 @@ if(!require("grid")) install.packages("grid");library("grid")
 if(!require("gridExtra")) install.packages("gridExtra");library("gridExtra")
 if(!require("data.table")) install.packages("data.table");library("data.table")
 
-## source(".\\all_countries_preparation.R")
+source(".\\Helper_functions\\preparation_functions.R")
 
 # http://www.fao.org/faostat/en/#data/PP
 data <- read.csv("FoodPrices.csv", sep = ","  ,stringsAsFactors = FALSE)
@@ -39,60 +37,27 @@ temp <- read.csv(file="Philipines_temp.csv",head=TRUE,sep=",")
 rain$pr = as.numeric(gsub(",", ".", gsub("\\.", "", rain$pr)))
 temp$tas = as.numeric(gsub(",", ".", gsub("\\.", "", temp$tas)))
 
-#rain$ISO3 = NULL
-#rain$ISO2 = NULL
-#rain$year = rain$X.Year
-#rain$X.Year = NULL
-#rain$month = rain$Month
-#rain$Month = NULL
+rain$ISO3 = NULL
+rain$ISO2 = NULL
+rain$year = rain$X.Year
+rain$X.Year = NULL
+rain$month = rain$Month
+rain$Month = NULL
 
-#temp$year = temp$X.Year
-#temp$X.Year = NULL
-#temp$month = temp$Month
-#temp$Month = NULL
+temp$year = temp$X.Year
+temp$X.Year = NULL
+temp$month = temp$Month
+temp$Month = NULL
 
-#raintemp = merge(rain,temp[c("tas","Year","month")],by=c("month","Year"))
-
-
-#prepare rain and temp data: mean amount of rain / mean temp for each quarter year
-colnames(rain)[2] <- "Year"
-colnames(temp)[2] <- "Year"
-rain[, c("ISO3", "ISO2", "Country")] <- NULL
-temp[, c("ISO3", "ISO2", "Country")] <- NULL
-rain$pr_q1 = 0
-rain$pr_q2 = 0
-rain$pr_q3 = 0
-rain$pr_q4 = 0
-rain$q =0
-rain[rain$Month == c(1,2,3),]$q = 1
-rain[rain$Month == c(4,5,6),]$q = 2
-rain[rain$Month == c(7,8,9),]$q = 3
-rain[rain$Month == c(10,11,12),]$q = 4
-temp$tas_q1 = 0
-temp$tas_q2 = 0
-temp$tas_q3 = 0
-temp$tas_q4 = 0
-temp$q =0
-temp[temp$Month == c(1,2,3),]$q = 1
-temp[temp$Month == c(4,5,6),]$q = 2
-temp[temp$Month == c(7,8,9),]$q = 3
-temp[temp$Month == c(10,11,12),]$q = 4
-
-for(z in 1991:2015){
-  rain[rain$Year == z ,]$pr_q1 = sum(rain[rain$Year == z & rain$Month == c(1,2,3),]$pr)/3
-  rain[rain$Year == z ,]$pr_q2 = sum(rain[rain$Year == z & rain$Month == c(4,5,6),]$pr)/3
-  rain[rain$Year == z ,]$pr_q3 = sum(rain[rain$Year == z & rain$Month == c(7,8,9),]$pr)/3
-  rain[rain$Year == z ,]$pr_q4 = sum(rain[rain$Year == z & rain$Month == c(10,11,12),]$pr)/3
-  
-  temp[temp$Year == z ,]$tas_q1 = sum(temp[temp$Year == z & temp$Month == c(1,2,3),]$tas)/3
-  temp[temp$Year == z ,]$tas_q2 = sum(temp[temp$Year == z & temp$Month == c(4,5,6),]$tas)/3
-  temp[temp$Year == z ,]$tas_q3 = sum(temp[temp$Year == z & temp$Month == c(7,8,9),]$tas)/3
-  temp[temp$Year == z ,]$tas_q4 = sum(temp[temp$Year == z & temp$Month == c(10,11,12),]$tas)/3
-}
+raintemp = merge(rain,temp[c("tas","Year","month")],by=c("month","Year"))
 
 
-data = merge(data,unique(rain[c("pr_q1","pr_q2","pr_q3","pr_q4","Year")]),by=c("Year")) 
-data = merge(data,unique(temp[c("tas_q1","tas_q2","tas_q3","tas_q4","Year")]),by=c("Year")) 
+raintemp = avgRainTempQuarter(raintemp,"month","Year","pr","tas")
+
+
+
+data = merge(india,unique(raintemp[c("tas_q1","tas_q2","tas_q3","tas_q4","pr_q1","pr_q2","pr_q3","pr_q4","Year")]),by=c("Year")) 
+
 
 ##################################################################################################
 
@@ -264,7 +229,11 @@ data <- merge(x = data, y = dpccs, by= "Year", all.x = TRUE)
 data$daily_caloric_supply[data$Year == "2014"] <- mean(unique(data$daily_caloric_supply[data$Year %in% c("2012", "2011", "2010", "2009", "2008")]))
 data$daily_caloric_supply[data$Year == "2015"] <- mean(unique(data$daily_caloric_supply[data$Year %in% c("2013" ,"2012", "2011", "2010", "2009")]))
 
+#removing rows with NAs in any column
 data1 <- data[complete.cases(data),]
 
-saveRDS(data1, "Philippines1.rds")
+#save our dataset for later
+saveRDS(data1, (".\\Processed_ds\\philippines_fin.rds"))
+#cleanup
+rm(list = setdiff(ls(), lsf.str()))
 
