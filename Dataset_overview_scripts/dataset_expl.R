@@ -23,11 +23,14 @@ for(i in unique(world_population$variable)){
 
 # creating and saving the plot
 jpeg(".//Plots//population_plot.jpg")
-ggplot(world_population) + geom_line(aes(x=Year, y=percentage, colour=variable)) +
+ggplot(world_population) + geom_line(aes(x=Year, y=percentage, colour=variable), size=1.5) +
   scale_colour_manual(values=c("red","green","blue", "gray")) +
   ylab(label="Growth Precentage") +
   xlab("Year") 
 dev.off()
 
+############################################################################################################
 
+
+# plotting the production amount of the selected products for the specified countries compared to the world
 
