@@ -74,18 +74,4 @@ avgRainTempQuarter = function(ds,month,mp_year,pr,tas){
   }  
 }
 
-#calculating the percentage of the change in a column's value on a fixed base year 
-calcPercFixBaseyear =  function(ds,namecol,cname,yearcol, baseyear,valuecol, perccol){
-  base = ds[ds[[yearcol]] == baseyear & ds[[namecol]] %in% cname, ][[valuecol]]
-  if(is.null(ds[[perccol]])){
-    ds[[perccol]] = 0 
-  }
-  #
-  for(i in baseyear: max(ds[[yearcol]])){
-    later = ds[ds[[yearcol]]==i & ds[[namecol]] %in% cname,][[valuecol]]
-    sub =  later - base
-    ds[ds[[yearcol]] == i & ds[[namecol]] %in% cname,][[perccol]] = (sub / base) * 100
-  }
-  return(ds)
-}
 
