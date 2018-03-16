@@ -1,5 +1,6 @@
 if(!require("fmsb")) install.packages("fmsb"); library("fmsb")
 if(!require("glmnet")) install.packages("glmnet"); library("glmnet")
+if(!require("VSURF")) install.packages("VSURF"); library("VSURF")
 
 #function for VIF based stepwise removal of multicorrelated variables
 removeVif<-function(explan_vars,cutoffval=10){
@@ -95,3 +96,16 @@ impVarsLasso = function(ds,targ){
 
   return(resultset)
 }
+
+
+#function for finding most important variables based on random forest  
+impVarsRf = function(ds,targ){
+
+  result_rf = VSURF(ds[[targ]] ~ ., data = ds[!colnames(ds) %in% targ], ntree = 2000,
+                nfor.thres = 50, nmin = 1, nfor.interp = 25, nsd = 1,
+                nfor.pred = 25, nmj = 1, parallel = FALSE, ncores = detectCores() - 1,
+                clusterType = "PSOCK")
+        
+  return(result_rf)
+}
+

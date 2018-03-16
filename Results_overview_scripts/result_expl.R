@@ -11,7 +11,7 @@ india_lasso_result = readRDS(".\\Results\\india_lasso.rds")
 rwanda_lasso_result = readRDS(".\\Results\\rwanda_lasso.rds")
 
 
-#feel free to play around with window sizes to achieve optimal siza and readability of graphs
+#feel free to play around with window sizes to achieve optimal size and readability of graphs
 #plot graphs
 dev.new(width=5, height=7)
 #Optimal number of variables -> where MSE is minimal

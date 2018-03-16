@@ -108,9 +108,13 @@ india = merge(india,inflation ,by=c("year"))
 india = merge(india,oilprice  ,by=c("year"))
 india = merge(india,population  ,by=c("year"))
 
-
-
-
+#renaming columns that appear in every country's data set
+colnames(india)[colnames(india) %in% "avg_price_prod_year"] = "prod_price"
+colnames(india)[colnames(india) %in% "prod_amount_y"] = "prod_amount"
+colnames(india)[colnames(india) %in% "cm_name"] = "prod_name"
+colnames(india)[colnames(india) %in% "adm0_name" ] = "country"
+colnames(india)[colnames(india) %in% "um_id" ] = "prod_uid"
+colnames(india)[colnames(india) %in% "um_name" ] = "prod_unit"
 
 
 #save our dataset for later
