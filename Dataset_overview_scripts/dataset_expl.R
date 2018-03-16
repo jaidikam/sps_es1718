@@ -3,7 +3,7 @@
 
 
 # plotting the population for the all countries and the world
-source(".\\Helper_functions\\preparation_functions.R")
+source(".\\Helper_functions\\exploration_functions.r")
 
 if(!require("reshape2")) install.packages("reshape2");library("reshape2")
 if(!require("ggplot2")) install.packages("ggplot2");library("ggplot2")
@@ -36,22 +36,51 @@ dev.off()
 # plotting the production amount of the selected products for the specified countries compared to the world
 
 world_production = read.csv(".\\Comman datasets\\coutries_and_world_production_data.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
-colnames(world_production) = c("Area", "Item", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015")
-
-world_production = as.data.frame(t(world_production))
-setDT(world_production, keep.rownames = TRUE)[]
 
 
+ggplot(world_production, aes(x = Year)) +
+  geom_line(aes(y = India_Potatoes), colour="blue") +
+  geom_line(aes(y = World_Potatoes), colour = "grey") +
+  ylab(label="precentage") +
+  xlab("Year")
+
+require(ggplot2)
+require(scales)
+
+ggplot(world_production, aes(x = Year)) +  
+  geom_bar(aes(y = (..India_Potatoes..)/sum(..India_Potatoes..))) +
+  ## version 3.0.9
+  # scale_y_continuous(labels = percent_format())
+  ## version 3.1.0
+  scale_y_continuous(labels = scales::percent)
+
+###########################3
+
+d = data.frame()
+final_d = world_production
+for(j in colnames(world_production[,-1])){
+  d = calcPercPreBaseyear(world_production, j, "Year")
+  final_d = merge(x = final_d, y = d, by= colnames(world_production), all.x =TRUE)
+}
+ggplot(final_d, aes(x = Year)) + 
+   geom_line(aes(y = India_Potatoes_perc), colour="blue") + 
+   geom_line(aes(y = World_Potatoes_perc), colour = "grey") + 
+   ylab(label="precentage") + 
+   xlab("Year")
 
 
-"Rice, paddy" 
-RD = world_production[world_production$Area == "Rwanda", ]
-RD = RD[RD$Item %in% c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"),]
-unique(RD$Item)
 
+####################################
 
+wp = as.matrix(world_production)
+wp2 = as.data.frame(scale(wp[,-1]))
+wp2$Year = world_production$Year
 
-
+ggplot(wp2, aes(x = Year)) +
+  geom_line(aes(y = India_Potatoes), colour="blue") +
+  geom_line(aes(y = World_Potatoes), colour = "grey") +
+  ylab(label="precentage") +
+  xlab("Year")
 
 
 
