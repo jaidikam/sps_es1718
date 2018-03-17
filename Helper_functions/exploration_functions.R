@@ -22,9 +22,9 @@ calcPercPreBaseyear = function(ds, colname, yearcol){
     later = ds[ds[,yearcol] == i+1, colname]
     if(length(later) == 0L) break
     sub =  later - base
-    ds[ds[,yearcol] == i+1, paste(colname, "perc", sep = "_")]= (sub / base) * 100
+    ds[ds[,yearcol] == i+1, paste(colname, "Percent", sep = "_")]= (sub / base) * 100
   }
-  ds[ds[,yearcol] == min(ds[,yearcol]), paste(colname, "perc", sep = "_")]= 0
+  ds[ds[,yearcol] == min(ds[,yearcol]), paste(colname, "Percent", sep = "_")]= 0
   return(ds)
 }
 

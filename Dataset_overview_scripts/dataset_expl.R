@@ -36,6 +36,7 @@ dev.off()
 
 # plotting the production amount of the selected products for the specified countries compared to the world
 
+# preparing the dataset 
 world_production = read.csv(".\\Comman datasets\\world production.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
 world_production$X = NULL
 colnames(world_production) = c("Area", "Item", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015")
@@ -53,6 +54,8 @@ world_production = world_production[!(world_production$Area == "Philippines" & w
 world_production = world_production[!(world_production$Area == "Rwanda" & world_production$Item %in% c("Wheat", "Sugar cane", "Coconuts")),]
 colnames(world_production)[3] = "Year"
 world_production$Year = as.numeric(levels(world_production$Year))[world_production$Year] 
+# nornalize the production amount
+world_production$Production_Amount = scale(world_production$Production_Amount)
 
 # calling the plot function and get the plot
 p1 = prodPlot(world_production, "India", c("Sugar cane", "Rice, paddy", "Wheat", "Potatoes"))
@@ -88,5 +91,9 @@ ggplot(price_index, aes(x = Date)) +
   ylab(label="Price Index") +
   xlab("Year")
 dev.off()
+
+#######################################################################################################
+
+
 
 
