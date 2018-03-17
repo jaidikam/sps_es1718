@@ -3,7 +3,6 @@
 
 
 # plotting the population for the all countries and the world
-source(".\\Helper_functions\\preparation_functions.r")
 source(".\\Helper_functions\\exploration_functions.r")
 
 if(!require("reshape2")) install.packages("reshape2");library("reshape2")
@@ -14,18 +13,19 @@ if(!require("data.table")) install.packages("data.table");library("data.table")
 world_population = read.csv(".\\Comman datasets\\world_population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
 
 # stacks a set of columns into a single column of data to be able to process it 
-world_population = melt(world_population, id=c("Year"))
+world_population = melt(world_population, id=c("Year"), value.name = "population")
 
 # calculating the percentage of the change in the population
 for(i in unique(world_population$variable)){
   # i is the name of the land 
   #print(i)
-  world_population = calcPercFixBaseyear(world_population,"variable",i,"Year",1991,"value", "percentage")
+  world_population = calcPercFixBaseyear(world_population,"variable",i,"Year",1991,"population", "percentage")
 }
 
 # creating and saving the plot
-jpeg(".//Plots//population_plot.jpg")
-ggplot(world_population) + geom_line(aes(x=Year, y=percentage, colour=variable), size=1.5) +
+jpeg(".//Plots//population_plot.jpg", width = 800, height = 480, units = "px", pointsize = 12,
+     quality = 75)
+ggplot(world_population) + geom_line(aes(x=Year, y=percentage, colour=variable), size=1.2) +
   scale_colour_manual(values=c("red","green","blue", "gray")) +
   ylab(label="Growth Precentage") +
   xlab("Year") 
@@ -53,61 +53,20 @@ world_production = world_production[!(world_production$Area == "Philippines" & w
 world_production = world_production[!(world_production$Area == "Rwanda" & world_production$Item %in% c("Wheat", "Sugar cane", "Coconuts")),]
 colnames(world_production)[3] = "Year"
 world_production$Year = as.numeric(levels(world_production$Year))[world_production$Year] 
-# ggplot(world_production, aes(x = Year)) +
-#   geom_line(aes(y = India_Potatoes), colour="blue") +
-#   geom_line(aes(y = World_Potatoes), colour = "grey") +
-#   ylab(label="precentage") +
-#   xlab("Year")
-# 
-# require(ggplot2)
-# require(scales)
-# 
-# ggplot(world_production, aes(x = Year)) +  
-#   geom_bar(aes(y = (..India_Potatoes..)/sum(..India_Potatoes..))) +
-#   ## version 3.0.9
-#   # scale_y_continuous(labels = percent_format())
-#   ## version 3.1.0
-#   scale_y_continuous(labels = scales::percent)
-# 
-# ###########################3
-# 
-# d = data.frame()
-# final_d = world_production
-# for(j in colnames(world_production[,-1])){
-#   d = calcPercPreBaseyear(world_production, j, "Year")
-#   final_d = merge(x = final_d, y = d, by= colnames(world_production), all.x =TRUE)
-# }
-# ggplot(final_d, aes(x = Year)) + 
-#    geom_line(aes(y = India_Potatoes_perc), colour="blue") + 
-#    geom_line(aes(y = World_Potatoes_perc), colour = "grey") + 
-#    ylab(label="precentage") + 
-#    xlab("Year")
-# 
 
+# calling the plot function and get the plot
+p1 = prodPlot(world_production, "India", c("Sugar cane", "Rice, paddy", "Wheat", "Potatoes"))
+p2 = prodPlot(world_production, "World", c("Sugar cane", "Rice, paddy", "Wheat", "Potatoes"))
+p3 = prodPlot(world_production, "Philippines", c("Bananas", "Coconuts", "Rice, paddy"))
+p4 = prodPlot(world_production, "World", c("Bananas", "Coconuts", "Rice, paddy"))
+p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
+p6 = prodPlot(world_production, "World", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
 
-####################################
-
-wp = as.matrix(world_production)
-world_production$Production_Amount = scale(world_production$Production_Amount)
-
-ggplot(world_production, aes(x = Year)) +
-  geom_line(aes(y = world_production[world_production$Area == "India" & world_production$Item == "Potatoes","value"]), colour="blue") +
-  geom_line(aes(y = world_production[world_production$Area == "World" & world_production$Item == "Potatoes","value"]), colour = "grey") +
-  ylab(label="precentage") +
-  xlab("Year")
-
-ggplot(world_production, aes(x = unique(Year))) +
-  geom_line(aes(y = world_production[world_production$Area == "India", "value"]), colour="blue") +
-  #geom_line(aes(y = world_production[world_production$Area == "World" & world_production$Item == "Potatoes","value"]), colour = "grey") +
-  ylab(label="precentage") +
-  xlab("Year")
-
-
-
-p1 <- ggplot(world_production, aes(x=Year[],
-                     y=price[product=='p3'],
-                     colour=factor(skew[product == 'p1']))) +
-  geom_point(size=2, shape=19)
+# plot in one screnn and save the image 
+jpeg(".//Plots//production.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
+     quality = 75)
+multiplot(p1, p3, p5,p2, p4,p6, cols=2)
+dev.off()
 
 #####################################################################################################
 
@@ -118,7 +77,8 @@ price_index$Date = as.yearmon(price_index$Date, format = "%m/%Y")
 price_index = price_index[!price_index$Date %in% c(1990,2016,2017,2018),]
 
 # creating and saving the plot
-jpeg(".//Plots//price_index.jpg")
+jpeg(".//Plots//price_index.jpg", width = 800, height = 480, units = "px", pointsize = 12,
+     quality = 75)
 ggplot(price_index, aes(x = Date)) +
   geom_line(aes(y = Food.Price.Index, colour="Food")) +
   geom_line(aes(y = Cereals.Price.Index, colour="Cereals")) +
