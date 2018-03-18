@@ -48,7 +48,7 @@ data <- data[, c("Item", "Year", "Unit", "Value", "Flag", "Flag.Description")]
 
 # choose a number of the most important products based of the production quantity 
 # Sweet potatoes Rice, paddy Potatoes Maize Cassava Bananas Beans, dry
-data <- data[data$Item %in% c("Sugar Cane", "Bananas", "Coconuts", "Rice_paddy"),]
+data <- data[data$Item %in% c("Sugar cane", "Bananas", "Coconuts", "Rice, paddy"),]
 
 ### rain and temp data 
 #replace commas with dots where necessary so we can convert to numeric
