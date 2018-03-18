@@ -1,36 +1,36 @@
 
 #calculating the percentage of the change in a column's value on a fixed base year 
-calcPercFixBaseyear =  function(ds,namecol,cname,yearcol, baseyear,valuecol, perccol){
-  base = ds[ds[[yearcol]] == baseyear & ds[[namecol]] %in% cname, ][[valuecol]]
+calcPercFixBaseyear =  function(ds, areacol, areaname, yearcol, baseyear,valuecol, perccol){
+  base = ds[ds[[yearcol]] == baseyear & ds[[areacol]] %in% areaname, ][[valuecol]]
   if(is.null(ds[[perccol]])){
     ds[[perccol]] = 0 
   }
   #
   for(i in baseyear: max(ds[[yearcol]])){
-    later = ds[ds[[yearcol]]==i & ds[[namecol]] %in% cname,][[valuecol]]
+    later = ds[ds[[yearcol]]==i & ds[[areacol]] %in% areaname,][[valuecol]]
     sub =  later - base
-    ds[ds[[yearcol]] == i & ds[[namecol]] %in% cname,][[perccol]] = (sub / base) * 100
+    ds[ds[[yearcol]] == i & ds[[areacol]] %in% areaname,][[perccol]] = (sub / later) * 100
   }
   return(ds)
 }
 
 
 # calculate the prcentage of changes in a colname value in a predefined year, where the base is for every change is the value from the previous year.
-calcPercPreBaseyear = function(ds, colname, yearcol){
-  for(i in ds[, yearcol]){
-    base = ds[ds[,yearcol] == i, colname]
-    later = ds[ds[,yearcol] == i+1, colname]
+calcPercPreBaseyear = function(ds, areacol, areaname, yearcol, valuecol){
+  for(i in unique(ds[[yearcol]])){
+    base = ds[ds[[yearcol]] == i & ds[[areacol]] %in% areaname, ][[valuecol]]
+    later = ds[ds[[yearcol]] == i+1 & ds[[areacol]] %in% areaname, ][[valuecol]]
     if(length(later) == 0L) break
     sub =  later - base
-    ds[ds[,yearcol] == i+1, paste(colname, "Percent", sep = "_")]= (sub / base) * 100
+    ds[ds[[yearcol]] == i+1, paste(valuecol, "Percent", sep = "_")]= (sub / later) * 100
   }
-  ds[ds[,yearcol] == min(ds[,yearcol]), paste(colname, "Percent", sep = "_")]= 0
+  ds[ds[[yearcol]] == min(ds[[yearcol]]), paste(valuecol, "Percent", sep = "_")]= 0
   return(ds)
 }
 
 # To plot production data with specific area and itmes
 prodPlot = function(ds, area, items){
-  p = ggplot(data=ds[ds$Area == area & world_production$Item %in% items,], aes(x=Year, y=Production_Amount, colour=Item)) +
+  p = ggplot(data=ds[ds$Area == area & ds$Item %in% items,], aes(x=Year, y=Percentage, colour=Item)) +
     geom_line() +
     geom_point()+
     ggtitle(label=area)+

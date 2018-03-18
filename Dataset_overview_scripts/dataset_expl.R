@@ -8,6 +8,8 @@ source(".\\Helper_functions\\exploration_functions.r")
 if(!require("reshape2")) install.packages("reshape2");library("reshape2")
 if(!require("ggplot2")) install.packages("ggplot2");library("ggplot2")
 if(!require("data.table")) install.packages("data.table");library("data.table")
+if(!require("zoo")) install.packages("zoo");library("zoo")
+
 
 #reading the data  
 world_population = read.csv(".\\Comman datasets\\world_population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
@@ -55,15 +57,29 @@ world_production = world_production[!(world_production$Area == "Rwanda" & world_
 colnames(world_production)[3] = "Year"
 world_production$Year = as.numeric(levels(world_production$Year))[world_production$Year] 
 # nornalize the production amount
-world_production$Production_Amount = scale(world_production$Production_Amount)
+#world_production$Production_Amount = scale(world_production$Production_Amount)
+h = data.frame()
+for(i in unique(world_production$Item)){
+  d = world_production[world_production$Item == i,]
+  for(j in unique(d$Area)){
+    # i is the name of the land 
+    #print(i)
+    d = calcPercFixBaseyear(d,"Area",j,"Year",1991,"Production_Amount", "Percentage")
+  }
+  h = rbind(h,d)
+}
+world_production = h
+
 
 # calling the plot function and get the plot
 p1 = prodPlot(world_production, "India", c("Sugar cane", "Rice, paddy", "Wheat", "Potatoes"))
 p2 = prodPlot(world_production, "World", c("Sugar cane", "Rice, paddy", "Wheat", "Potatoes"))
 p3 = prodPlot(world_production, "Philippines", c("Bananas", "Coconuts", "Rice, paddy"))
 p4 = prodPlot(world_production, "World", c("Bananas", "Coconuts", "Rice, paddy"))
-p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
-p6 = prodPlot(world_production, "World", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
+# p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
+# p6 = prodPlot(world_production, "World", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
+p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Maize", "Sweet potatoes"))
+p6 = prodPlot(world_production, "World", c("Cassava", "Bananas", "Maize", "Sweet potatoes"))
 
 # plot in one screnn and save the image 
 jpeg(".//Plots//production.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
