@@ -1,4 +1,4 @@
-source("~/sps_ws1718/Helper_functions/preparation_funcions.R")
+
 
 library(data.table)
 if(!require("plyr")) install.packages("plyr"); library("plyr")
@@ -9,7 +9,8 @@ if(!require("grid")) install.packages("grid");library("grid")
 if(!require("gridExtra")) install.packages("gridExtra");library("gridExtra")
 if(!require("data.table")) install.packages("data.table");library("data.table")
 
-#source(paste0(getwd(),"/Helper_functions/preparation_funcions.R"))
+source("~/sps_ws1718/Helper_functions/preparation_functions.R")
+
 
 
 # http://www.fao.org/faostat/en/#data/PP
@@ -47,7 +48,7 @@ data <- data[, c("Item", "Year", "Unit", "Value", "Flag", "Flag.Description")]
 
 # choose a number of the most important products based of the production quantity 
 # Sweet potatoes Rice, paddy Potatoes Maize Cassava Bananas Beans, dry
-data <- data[data$Item %in% c("Sugar Cane", "Bananas", "Coconuts", "Rice, paddy"),]
+data <- data[data$Item %in% c("Sugar Cane", "Bananas", "Coconuts", "Rice_paddy"),]
 
 ### rain and temp data 
 #replace commas with dots where necessary so we can convert to numeric
@@ -164,7 +165,7 @@ setDT(Agriculture_GDP, keep.rownames = TRUE)[]
 colnames(Agriculture_GDP) <- c("Year", "Agriculture_GDP")
 
 #replace commas with dots where necessary so we can convert to numeric
-Agriculture_GDP$Agriculture_GDP = as.numeric(gsub(",", ".", gsub("\\.", "", Agriculture_GDP$Agriculture_GDP)))
+#Agriculture_GDP$Agriculture_GDP = as.numeric(gsub(",", ".", gsub("\\.", "", Agriculture_GDP$Agriculture_GDP)))
 
 data <- merge(x = data, y = Agriculture_GDP, by= "Year", all.x = TRUE)
 
@@ -214,8 +215,34 @@ data$daily_caloric_supply[data$Year == "2015"] <- mean(unique(data$daily_caloric
 #removing rows with NAs in any column
 data1 <- data[complete.cases(data),]
 
+#renameing colums for final use
+colnames(data1)[colnames(data1) %in% "Value"] = "prod_price"
+colnames(data1)[colnames(data1) %in% "ProductionAmount" ] = "prod_amount"
+colnames(data1)[colnames(data1) %in% "Year" ] = "year"
+colnames(data1)[colnames(data1) %in% "Item" ] = "prod_name"
+colnames(data1)[colnames(data1) %in% "PopulationValue" ] = "population"
+colnames(data1)[colnames(data1) %in% "oil_avarage_price_per_barrel" ] = "avg_p_barrel"
+colnames(data1)[colnames(data1) %in% "GNI" ] = "gni_pc"
+colnames(data1)[colnames(data1) %in% "GDP" ] = "gdp"
+colnames(data1)[colnames(data1) %in% "Inflation" ] = "cp_inflation"
+colnames(data1)[colnames(data1) %in% "Agriculture_GDP" ] = "agri_gdp"
+colnames(data1)[colnames(data1) %in% "Import" ] = "imp_cer"
+colnames(data1)[colnames(data1) %in% "Export" ] = "exp_agri"
+colnames(data1)[colnames(data1) %in% "ExchangeRate" ] = "exchange_rate"
+colnames(data1)[colnames(data1) %in% "Flag" ] = "flag"
+colnames(data1)[colnames(data1) %in% "Flag.Description" ] = "flag.description"
+colnames(data1)[colnames(data1) %in% "PopulationUnit" ] = "population_unit"
+colnames(data1)[colnames(data1) %in% "Unit" ] = "unit"
+
+
+colnames(data1)
+
 #save our dataset for later
 saveRDS(data1, ("~/sps_ws1718/Processed_ds/philippines_fin.rds"))
+
+
+
+
 #cleanup
 rm(list = setdiff(ls(), lsf.str()))
 
