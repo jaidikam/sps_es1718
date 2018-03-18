@@ -51,7 +51,7 @@ world_production = world_production[world_production$Item %in% c("Sugar cane", "
 # remove some uninterstting itmes specified by a land
 world_production = world_production[!(world_production$Area == "India" & world_production$Item %in% c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Coconuts")),]
 
-world_production = world_production[!(world_production$Area == "Philippines" & world_production$Item %in% c("Cassava", "Wheat", "Beans, dry", "Maize", "Sweet potatoes", "Sugar cane", "Potatoes")),]
+world_production = world_production[!(world_production$Area == "Philippines" & world_production$Item %in% c("Cassava", "Wheat", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes")),]
 
 world_production = world_production[!(world_production$Area == "Rwanda" & world_production$Item %in% c("Wheat", "Sugar cane", "Coconuts")),]
 colnames(world_production)[3] = "Year"
@@ -74,8 +74,8 @@ world_production = h
 # calling the plot function and get the plot
 p1 = prodPlot(world_production, "India", c("Sugar cane", "Rice, paddy", "Wheat", "Potatoes"))
 p2 = prodPlot(world_production, "World", c("Sugar cane", "Rice, paddy", "Wheat", "Potatoes"))
-p3 = prodPlot(world_production, "Philippines", c("Bananas", "Coconuts", "Rice, paddy"))
-p4 = prodPlot(world_production, "World", c("Bananas", "Coconuts", "Rice, paddy"))
+p3 = prodPlot(world_production, "Philippines", c("Sugar cane", "Bananas", "Coconuts", "Rice, paddy"))
+p4 = prodPlot(world_production, "World", c("Sugar cane", "Bananas", "Coconuts", "Rice, paddy"))
 # p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
 # p6 = prodPlot(world_production, "World", c("Cassava", "Bananas", "Beans, dry", "Maize", "Sweet potatoes", "Potatoes", "Rice, paddy"))
 p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Maize", "Sweet potatoes"))
@@ -109,7 +109,34 @@ ggplot(price_index, aes(x = Date)) +
 dev.off()
 
 #######################################################################################################
+# ploting a bar chart for each item form 2010 - 2015 
+rdata = readRDS(".\\Processed_ds\\rwanda_fin.rds")
+pdata = readRDS(".\\Processed_ds\\philippines_fin.rds")
+idata = readRDS(".\\Processed_ds\\india_fin.rds")
 
+# calculating the percentage of chance in the prices
+f = function(d, value){
+  for(i in unique(d$prod_name)){
+    for(j in unique(d$year)){
+      base = value[d$prod_name == i & d$year == j]
+      later = value[d$prod_name == i & d$year == j+1]
+      sub =  later - base
+      d$perc[d$prod_name == i & d$year == j+1]= (sub / base) * 100
+    }
+  }
+  d$perc[d$year == 1991] = 0
+  return(d)
+}
+data$year = as.factor(data$year)
+data1 = f(d = data, value = data$prod_price)
+data = 
+  if(!require("plotly")) install.packages("plotly");library("plotly")
+
+plotd = data1[data1$year %in% c(2010:2015) ,c("year", "prod_name", "perc")]
+
+
+ggplot(plotd, aes(x = year, y = perc)) +   
+  geom_bar(aes(fill = prod_name), position = "dodge", stat="identity")
 
 
 
