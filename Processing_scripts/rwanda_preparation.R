@@ -217,6 +217,7 @@ data$daily_caloric_supply[data$Year == "2015"] = mean(unique(data$daily_caloric_
 
 # matching the data with the other datas 
 colnames(data) = c("year", "prod_name", "unit","prod_price", "flag", "flag.description", "tas_q1", "tas_q2", "tas_q3", "tas_q4", "pr_q1", "pr_q2", "pr_q3", "pr_q4", "avg_p_barrel","population_unit", "population", "prod_amount", "gni_pc", "exchange_rate", "gdp", "cp_inflation", "agri_gdp", "exp_veg", "exp_cer", "imp_veg", "imp_cer", "daily_caloric_supply")
+data$prod_price = as.numeric(data$prod_price)
 # saving the data
 saveRDS(data, ".\\Processed_ds\\rwanda_fin.rds")
 
