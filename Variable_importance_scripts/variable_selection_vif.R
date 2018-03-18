@@ -17,15 +17,15 @@ normalized_in = as.data.frame(scale(india[colselection_in]))
 feats_in = normalized_in[, !(colnames(normalized_in) %in% target_in)]
 
 colselection_rw =  c("pr_q1", "pr_q2", "pr_q3", "pr_q4", "tas_q1", "tas_q2", "tas_q3", "tas_q4",
-                "Production_Amount", "daily_caloric_supply", "exp_veg", "exp_cer", "imp_veg", "imp_cer", 
-                "Agriculture_GDP", "GNI","Inflation", "oil_avarage_price_per_barrel", "Population_Value","prod_price")
+                     "prod_amount", "daily_caloric_supply", "exp_veg", "exp_cer", "imp_veg", "imp_cer", 
+                     "agri_gdp", "gni_pc","cp_inflation", "avg_p_barrel", "population","prod_price")
 target_rw = c("prod_price")
 normalized_rw = as.data.frame(scale(rwanda[colselection_rw]))
 feats_rw = normalized_rw[, !(colnames(normalized_rw) %in% target_rw)]
 
 colselection_ph =  c("prod_price","tas_q1","tas_q2","tas_q3","tas_q4","pr_q1","pr_q2","pr_q3",
-                     "pr_q4","oil_avarage_price_per_barrel", "PopulationValue", "ProductionAmount","GNI", "ExchangeRate",
-                     "GDP","Inflation","Agriculture_GDP","Import","Export","daily_caloric_supply")
+                     "pr_q4","avg_p_barrel", "population", "prod_amount","gni_pc", "exchange_rate",
+                     "gdp","cp_inflation","agri_gdp", "imp_cer","exp_agri","daily_caloric_supply")
 target_ph = c("prod_price")
 normalized_ph = as.data.frame(scale(philippines[colselection_ph]))
 feats_ph = normalized_ph[, !(colnames(normalized_ph) %in% target_ph)]

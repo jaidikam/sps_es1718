@@ -105,7 +105,10 @@ impVarsRf = function(ds,targ){
                 nfor.thres = 50, nmin = 1, nfor.interp = 25, nsd = 1,
                 nfor.pred = 25, nmj = 1, parallel = FALSE, ncores = detectCores() - 1,
                 clusterType = "PSOCK")
-        
-  return(result_rf)
+  #create a list to store the result
+  resultset =  vector("list",2)  
+  resultset[[1]] = result_rf
+  resultset[[2]] = colnames(ds)
+  return(resultset)
 }
 
