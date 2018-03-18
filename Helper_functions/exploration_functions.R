@@ -33,6 +33,7 @@ prodPlot = function(ds, area, items){
   p = ggplot(data=ds[ds$Area == area & ds$Item %in% items,], aes(x=Year, y=Percentage, colour=Item)) +
     geom_line() +
     geom_point()+
+    ylim(-30, 75)+
     ggtitle(label=area)+
     ylab(label="Normalized Production Amount") +
     xlab("Year")
