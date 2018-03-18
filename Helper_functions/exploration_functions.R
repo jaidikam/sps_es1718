@@ -20,11 +20,13 @@ calcPercPreBaseyear = function(ds, areacol, areaname, yearcol, valuecol){
   for(i in unique(ds[[yearcol]])){
     base = ds[ds[[yearcol]] == i & ds[[areacol]] %in% areaname, ][[valuecol]]
     later = ds[ds[[yearcol]] == i+1 & ds[[areacol]] %in% areaname, ][[valuecol]]
-    if(length(later) == 0L) break
+    #if(length(later) == 0L) break
+    if(i == 2015L) break
     sub =  later - base
-    ds[ds[[yearcol]] == i+1, paste(valuecol, "Percent", sep = "_")]= (sub / later) * 100
+    if(length(sub) == 0L)next 
+    ds[ds[[yearcol]] == i+1 & ds[[areacol]] %in% areaname , paste(valuecol, "Percent", sep = "_")]= (sub / later) * 100
   }
-  ds[ds[[yearcol]] == min(ds[[yearcol]]), paste(valuecol, "Percent", sep = "_")]= 0
+  ds[ds[[yearcol]] == min(ds[[yearcol]]) & ds[[areacol]] %in% areaname, paste(valuecol, "Percent", sep = "_")]= 0
   return(ds)
 }
 
@@ -38,6 +40,16 @@ prodPlot = function(ds, area, items){
     ylab(label="Normalized Production Amount") +
     xlab("Year")
   return(p)
+}
+
+# bar plot for product price change 
+
+prodBarPlot = function(d, dname){
+  ggplot(d[d$year %in% c(2010:2015) ,c("year", "prod_name", "prod_price_Percent")], aes(x = year, y = prod_price_Percent)) +
+    geom_bar(aes(fill = prod_name), position = "dodge", stat="identity") +
+    ggtitle(label=dname)+
+    ylab(label="price change based on previous year") +
+    xlab("Year")
 }
 
 # Multiple plot function

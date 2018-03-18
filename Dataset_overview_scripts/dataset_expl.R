@@ -109,35 +109,26 @@ ggplot(price_index, aes(x = Date)) +
 dev.off()
 
 #######################################################################################################
-# ploting a bar chart for each item form 2010 - 2015 
-# rdata = readRDS(".\\Processed_ds\\rwanda_fin.rds")
-# pdata = readRDS(".\\Processed_ds\\philippines_fin.rds")
-# idata = readRDS(".\\Processed_ds\\india_fin.rds")
-# 
-# rdata = calcPercPreBaseyear(rdata, )
-# # calculating the percentage of chance in the prices
-# f = function(d, value){
-#   for(i in unique(d$prod_name)){
-#     for(j in unique(d$year)){
-#       base = value[d$prod_name == i & d$year == j]
-#       later = value[d$prod_name == i & d$year == j+1]
-#       sub =  later - base
-#       d$perc[d$prod_name == i & d$year == j+1]= (sub / base) * 100
-#     }
-#   }
-#   d$perc[d$year == 1991] = 0
-#   return(d)
-# }
-# data$year = as.factor(data$year)
-# data1 = f(d = data, value = data$prod_price)
-# data = 
-#   if(!require("plotly")) install.packages("plotly");library("plotly")
-# 
-# plotd = data1[data1$year %in% c(2010:2015) ,c("year", "prod_name", "perc")]
-# 
-# 
-# ggplot(plotd, aes(x = year, y = perc)) +   
-#   geom_bar(aes(fill = prod_name), position = "dodge", stat="identity")
+#ploting a bar chart for each item form 2010 - 2015
+rdata = readRDS(".\\Processed_ds\\rwanda_fin.rds")
+pdata = readRDS(".\\Processed_ds\\philippines_fin.rds")
+idata = readRDS(".\\Processed_ds\\india_fin.rds")
+for(i in unique(rdata$prod_name)){
+  rdata = calcPercPreBaseyear(rdata, "prod_name", i, "year", "prod_price")
+}
+for(i in unique(pdata$prod_name)){
+  pdata = calcPercPreBaseyear(pdata, "prod_name", i, "year", "prod_price")
+}
+for(i in unique(idata$prod_name)){
+  idata = calcPercPreBaseyear(idata, "prod_name", i, "year", "prod_price")
+}
+idata[idata$year == 2012 & idata$prod_name == "Potatoes", "prod_price_Percent"] = 0
+b1 = prodBarPlot(rdata, "Rwanda")
+b2 = prodBarPlot(pdata, "Philippines")
+b3 = prodBarPlot(idata, "India")
 
-
+jpeg(".//Plots//barplot_price_change.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
+     quality = 75)
+multiplot(b1,b2,b3, cols=1)
+dev.off()
 
