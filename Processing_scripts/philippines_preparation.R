@@ -112,8 +112,8 @@ setDT(GNI, keep.rownames = TRUE)[]
 
 colnames(GNI) <- c("Year", "GNI")
 
-GNI$GNI = as.numeric(gsub(",", ".", gsub("\\.", "", GNI$GNI)))
-GNI$Year = as.numeric(gsub(",", ".", gsub("\\.", "", GNI$Year)))
+#GNI$GNI = as.numeric(gsub(",", ".", gsub("\\.", "", GNI$GNI)))
+#GNI$Year = as.numeric(gsub(",", ".", gsub("\\.", "", GNI$Year)))
 
 
 data <- merge(x = data, y = GNI, by= "Year", all.x = TRUE)
@@ -148,7 +148,7 @@ setDT(Inflation, keep.rownames = TRUE)[]
 colnames(Inflation) <- c("Year", "Inflation")
 
 #replace commas with dots where necessary so we can convert to numeric
-Inflation$Inflation = as.numeric(gsub(",", ".", gsub("\\.", "", Inflation$Inflation)))
+#Inflation$Inflation = as.numeric(gsub(",", ".", gsub("\\.", "", Inflation$Inflation)))
 
 data <- merge(x = data, y = Inflation, by= "Year", all.x = TRUE)
 
