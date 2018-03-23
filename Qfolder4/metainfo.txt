@@ -1,0 +1,18 @@
+Name of Quantlet: SPL_Q4_india_impvar_lasso
+
+Published in:     'Statistical  programming  languages - Student  Project  on  "The driving factors behind food                        prices in developing countries'
+
+Description:      Selects important explanatory variables by applying the Least Absolute Shrinkage and Selection                       Operator method 
+
+Keywords:         india, variable selection, lasso, glmnet, Mean Square Error
+
+Author:           Benjamin Jaidi
+
+See also:         SPL_Q2_india_finalization, SPL_Q3_india_impvar_vif, SPL_Q5_india_impvar_rf, 
+                  SPL_Q6_result_exploration
+
+Submitted:        Fri, March 30 2018 by Benjamin Jaidi
+
+Datafile:         Q2_india_fin.rds
+
+Output:           Q4_india_lasso.rds

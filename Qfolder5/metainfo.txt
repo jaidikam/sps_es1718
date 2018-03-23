@@ -1,0 +1,19 @@
+Name of Quantlet: SPL_Q5_india_impvar_rf 
+
+Published in:     'Statistical  programming  languages - Student  Project  on  "The driving factors behind food                        prices in developing countries'
+
+Description:      Selects important explanatory variables based on random forest and ranking by OOB-error
+
+Keywords:         india, variable selection, random forest, Out Of Bag Error, VSURF
+
+Author:           Benjamin Jaidi
+
+See also:         SPL_Q2_india_finalization, SPL_Q3_india_impvar_vif, SPL_Q4_india_impvar_lasso,
+                
+                  SPL_Q6_result_exploration
+
+Submitted:        Fri, March 30 2018 by Benjamin Jaidi
+
+Datafile:         Q2_india_fin.rds
+
+Output:           Q5_india_rf.rds

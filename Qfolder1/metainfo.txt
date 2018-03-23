@@ -1,0 +1,18 @@
+Name of Quantlet: SPL_Q1_india_preparation
+
+Published in:     'Statistical  programming  languages - Student  Project  on  "The driving factors behind food                    prices in developing countries'
+
+Description:      Calculates average price for given crops per year for India 
+
+Keywords:         food price, crops, india, developing country, economy
+
+Author:           Benjamin Jaidi
+
+See also:         SPL_Q2_india_finalization
+
+Submitted:        Fri, March 30 2018 by Benjamin Jaidi
+
+Datafile:         Q1_india_prices.rds
+
+Output:           Q1_india_wip.rds
+

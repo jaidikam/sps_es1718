@@ -108,7 +108,7 @@ impVarsRf = function(ds,targ){
   #create a list to store the result
   resultset =  vector("list",2)  
   resultset[[1]] = result_rf
-  resultset[[2]] = colnames(ds)
+  resultset[[2]] = colnames(ds[!colnames(ds) %in% targ])
   return(resultset)
 }
 

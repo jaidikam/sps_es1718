@@ -1,0 +1,18 @@
+Name of Quantlet: SPL_Q2_india_finalization
+
+Published in:     'Statistical  programming  languages - Student  Project  on  "The driving factors behind food                    prices in developing countries'
+
+Description:      Calculates average amount of rain and temperature for each quarter year and adds explanatory                     variables
+
+Keywords:         india, climate, rain, temperature, agriculture 
+
+Author:           Benjamin Jaidi
+
+See also:         SPL_Q1_india_preparation, SPL_Q3_india_impvar_vif
+
+Submitted:        Fri, March 30 2018 by Benjamin Jaidi
+
+Datafile:         Q2_india_rain.rds, Q2_india_temp.rds, Q2_india_rest.rds
+
+Output:           Q2_india_fin.rds
+
