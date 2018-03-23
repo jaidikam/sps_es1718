@@ -66,15 +66,15 @@ varslovifnohc_in = removeVif(feats_in[,-hicorvars_in],8)
 varslovifnohc_rw = removeVif(feats_rw[,-hicorvars_rw],8) 
 varslovifnohc_ph = removeVif(feats_ph[,-hicorvars_ph],8) 
 #Model without multicolinearity
-expvars_lovif_in = paste(paste(varslovifhc_in,collapse = "+"),"+",paste(varslovifnohc_in,collapse = "+"),collapse = "+")
+expvars_lovif_in = paste(paste(varslovifhc_in$variable,collapse = "+"),"+",paste(varslovifnohc_in$variable,collapse = "+"),collapse = "+")
 formula_lovif_in = paste(target_in,"~",expvars_lovif_in,collapse = "+")
 mod_lovif_in = lm(formula_lovif_in,data = normalized_in)
 
-expvars_lovif_rw = paste(paste(varslovifhc_rw,collapse = "+"),"+",paste(varslovifnohc_rw,collapse = "+"),collapse = "+")
+expvars_lovif_rw = paste(paste(varslovifhc_rw$variable,collapse = "+"),"+",paste(varslovifnohc_rw$variable,collapse = "+"),collapse = "+")
 formula_lovif_rw = paste(target_rw,"~",expvars_lovif_rw,collapse = "+")
 mod_lovif_rw = lm(formula_lovif_rw,data = normalized_rw)
 
-expvars_lovif_ph = paste(paste(varslovifhc_ph,collapse = "+"),"+",paste(varslovifnohc_ph,collapse = "+"),collapse = "+")
+expvars_lovif_ph = paste(paste(varslovifhc_ph$variable,collapse = "+"),"+",paste(varslovifnohc_ph$variable,collapse = "+"),collapse = "+")
 formula_lovif_ph = paste(target_ph,"~",expvars_lovif_ph,collapse = "+")
 mod_lovif_ph = lm(formula_lovif_ph,data = normalized_ph)
 #save results

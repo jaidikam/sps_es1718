@@ -65,7 +65,7 @@ removeVif = function(explan_vars,cutoffval=10){
     cat("\n")
     
   }
-  return(tempresults$variable)
+  return(tempresults)
 }
 
 
@@ -74,7 +74,7 @@ varslovifhc_in = removeVif(feats_in[,hicorvars_in],8)
 # for lower correlated variables
 varslovifnohc_in = removeVif(feats_in[,-hicorvars_in],8) 
 #Model without multicolinearity
-expvars_lovif_in = paste(paste(varslovifhc_in,collapse = "+"),"+",paste(varslovifnohc_in,collapse = "+"),collapse = "+")
+expvars_lovif_in = paste(paste(varslovifhc_in$variable,collapse = "+"),"+",paste(varslovifnohc_in$variable,collapse = "+"),collapse = "+")
 formula_lovif_in = paste(target_in,"~",expvars_lovif_in,collapse = "+")
 mod_lovif_in = lm(formula_lovif_in,data = normalized_in)
 

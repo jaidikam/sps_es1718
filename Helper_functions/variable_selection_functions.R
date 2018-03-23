@@ -35,7 +35,7 @@ removeVif<-function(explan_vars,cutoffval=10){
     cat("\n")
     
   }
-  return(tempresults$variable)
+  return(tempresults)
 }
 
 
