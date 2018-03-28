@@ -12,7 +12,7 @@ if(!require("zoo")) install.packages("zoo");library("zoo")
 
 
 #reading the data  
-world_population = read.csv(".\\Comman datasets\\world_population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
+world_population = read.csv(".\\Common_datasets\\world_population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
 
 # stacks a set of columns into a single column of data to be able to process it 
 world_population = melt(world_population, id=c("Year"), value.name = "population")
@@ -25,7 +25,7 @@ for(i in unique(world_population$variable)){
 }
 
 # creating and saving the plot
-jpeg(".//Plots//population_plot.jpg", width = 800, height = 480, units = "px", pointsize = 12,
+jpeg(".//Ds_overview_plots//population_plot.jpg", width = 800, height = 480, units = "px", pointsize = 12,
      quality = 75)
 ggplot(world_population) + geom_line(aes(x=Year, y=percentage, colour=variable), size=1.2) +
   scale_colour_manual(values=c("red","green","blue", "gray")) +
@@ -39,7 +39,7 @@ dev.off()
 # plotting the production amount of the selected products for the specified countries compared to the world
 
 # preparing the dataset 
-world_production = read.csv(".\\Comman datasets\\world_production.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
+world_production = read.csv(".\\Common_datasets\\world_production.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
 world_production$X = NULL
 colnames(world_production) = c("Area", "Item", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015")
 
@@ -82,7 +82,7 @@ p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Maize", "Swee
 p6 = prodPlot(world_production, "World", c("Cassava", "Bananas", "Maize", "Sweet potatoes"))
 
 # plot in one screnn and save the image 
-jpeg(".//Plots//production.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
+jpeg(".//Ds_overview_plots//production.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
      quality = 75)
 multiplot(p1, p3, p5,p2, p4,p6, cols=2)
 dev.off()
@@ -90,13 +90,13 @@ dev.off()
 #####################################################################################################
 
 # source FAO
-price_index = read.csv(".\\Comman datasets\\Food_price_indices_data.csv", stringsAsFactors = FALSE, sep = ",")
+price_index = read.csv(".\\Common_datasets\\Food_price_indices_data.csv", stringsAsFactors = FALSE, sep = ",")
 price_index[,8:16] = NULL
 price_index$Date = as.yearmon(price_index$Date, format = "%m/%Y")
 price_index = price_index[!price_index$Date %in% c(1990,2016,2017,2018),]
 
 # creating and saving the plot
-jpeg(".//Plots//price_index.jpg", width = 800, height = 480, units = "px", pointsize = 12,
+jpeg(".//Ds_overview_plots//price_index.jpg", width = 800, height = 480, units = "px", pointsize = 12,
      quality = 75)
 ggplot(price_index, aes(x = Date)) +
   geom_line(aes(y = Food.Price.Index, colour="Food")) +
@@ -127,7 +127,7 @@ b1 = prodBarPlot(rdata, "Rwanda")
 b2 = prodBarPlot(pdata, "Philippines")
 b3 = prodBarPlot(idata, "India")
 
-jpeg(".//Plots//barplot_price_change.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
+jpeg(".//Ds_overview_plots//barplot_price_change.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
      quality = 75)
 multiplot(b1,b2,b3, cols=1)
 dev.off()

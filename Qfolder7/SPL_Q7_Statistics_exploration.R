@@ -7,7 +7,7 @@ price_index = read.csv(".\\Qfolder7\\Food_price_indices_data.csv", stringsAsFact
 
 rdata = readRDS(".\\Qfolder7\\rwanda_fin.rds")
 pdata = readRDS(".\\Qfolder7\\philippines_fin.rds")
-idata = readRDS(".\\Qfolder7\\india_fin.rds")
+idata = readRDS(".\\Qfolder2\\Q2_india_fin.rds")
 
 # libraries 
 if(!require("reshape2")) install.packages("reshape2");library("reshape2")
@@ -131,10 +131,10 @@ for(i in unique(world_population$variable)){
 }
 
 # creating and saving the plot
-jpeg(".//Plots//population_plot.jpg", width = 800, height = 480, units = "px", pointsize = 12,
+jpeg(".//Qfolder7//population_plot.jpg", width = 800, height = 480, units = "px", pointsize = 12,
      quality = 75)
 ggplot(world_population) + geom_line(aes(x=Year, y=percentage, colour=variable), size=1.2) +
-  scale_colour_manual(values=c("red","green","blue", "gray")) +
+  scale_colour_manual(values=c("red","green","blue", "grey")) +
   ylab(label="Growth Precentage") +
   xlab("Year") 
 dev.off()
@@ -187,7 +187,7 @@ p5 = prodPlot(world_production, "Rwanda", c("Cassava", "Bananas", "Maize", "Swee
 p6 = prodPlot(world_production, "World", c("Cassava", "Bananas", "Maize", "Sweet potatoes"))
 
 # plot in one screnn and save the image 
-jpeg(".//Plots//production.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
+jpeg(".//Qfolder7//production.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
      quality = 75)
 multiplot(p1, p3, p5,p2, p4,p6, cols=2)
 dev.off()
@@ -200,7 +200,7 @@ price_index$Date = as.yearmon(price_index$Date, format = "%m/%Y")
 price_index = price_index[!price_index$Date %in% c(1990,2016,2017,2018),]
 
 # creating and saving the plot
-jpeg(".//Plots//price_index.jpg", width = 800, height = 480, units = "px", pointsize = 12,
+jpeg(".//Qfolder7//price_index.jpg", width = 800, height = 480, units = "px", pointsize = 12,
      quality = 75)
 ggplot(price_index, aes(x = Date)) +
   geom_line(aes(y = Food.Price.Index, colour="Food")) +
@@ -229,8 +229,11 @@ b1 = prodBarPlot(rdata, "Rwanda")
 b2 = prodBarPlot(pdata, "Philippines")
 b3 = prodBarPlot(idata, "India")
 
-jpeg(".//Plots//barplot_price_change.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
+jpeg(".//Qfolder7//barplot_price_change.jpg", width = 1200, height = 800, units = "px", pointsize = 12,
      quality = 75)
 multiplot(b1,b2,b3, cols=1)
 dev.off()
 
+
+#cleanup
+rm(list = setdiff(ls(), lsf.str()))
