@@ -1,4 +1,4 @@
-Name of Quantlet: SPL_Q7_Statistics_exploration 
+Name of Quantlet: SPL_Q7_countries_exploration 
 
 Published in:     'Statistical  programming  languages - Student  Project  on  "The driving factors behind food                        prices in developing countries'
 
