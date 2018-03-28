@@ -1,13 +1,13 @@
 
 
 #reading the data  
-world_population = read.csv(".\\world_population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
-world_production = read.csv(".\\world_production.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
-price_index = read.csv(".\\Food_price_indices_data.csv", stringsAsFactors = FALSE, sep = ",")
+world_population = read.csv(".\\Qfolder7\\world_population.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
+world_production = read.csv(".\\Qfolder7\\world_production.csv", stringsAsFactors = FALSE, sep = ",", header = TRUE)
+price_index = read.csv(".\\Qfolder7\\Food_price_indices_data.csv", stringsAsFactors = FALSE, sep = ",")
 
-rdata = readRDS(".\\rwanda_fin.rds")
-pdata = readRDS(".\\Pphilippines_fin.rds")
-idata = readRDS(".\\india_fin.rds")
+rdata = readRDS(".\\Qfolder7\\rwanda_fin.rds")
+pdata = readRDS(".\\Qfolder7\\philippines_fin.rds")
+idata = readRDS(".\\Qfolder7\\india_fin.rds")
 
 # libraries 
 if(!require("reshape2")) install.packages("reshape2");library("reshape2")
