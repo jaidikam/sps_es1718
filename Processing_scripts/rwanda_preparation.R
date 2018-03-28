@@ -10,27 +10,27 @@ if(!require("data.table")) install.packages("data.table");library("data.table")
 
 
 # http://www.fao.org/faostat/en/#data/PP
-data = read.csv(".\\Rwanda datasets\\Food prices.csv", sep = ","  ,stringsAsFactors = FALSE)
+data = read.csv(".\\Rwanda datasets\\Food_prices.csv", sep = ","  ,stringsAsFactors = FALSE)
 # temprature and rainfall data from 1991 - 2015
 #source: http://sdwebx.worldbank.org/climateportal/index.cfm?page=downscaled_data_download&menu=historical
 temp = read.csv(".\\Rwanda datasets\\Rwanda_temp.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
 rain = read.csv(".\\Rwanda datasets\\Rwanda_rainfall.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
 # Source: https://www.statista.com/statistics/262858/change-in-opec-crude-oil-prices-since-1960/
-oil_prices = read.csv(".\\Rwanda datasets\\Oil prices .csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
+oil_prices = read.csv(".\\Rwanda datasets\\Oil_prices.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
 # Source: http://www.fao.org/faostat/en/#data/OA
 population = read.csv(".\\Rwanda datasets\\Population.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # Source: http://www.fao.org/faostat/en/#data/OA
-Production_amount = read.csv(".\\Rwanda datasets\\Production Amount.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Production_amount = read.csv(".\\Rwanda datasets\\Production_Amount.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/NY.GNP.PCAP.KD?locations=RW
 GNI = read.csv(".\\Rwanda datasets\\GNI.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # Source: http://www.fao.org/faostat/en/#data/OA
-exchange_rate = read.csv(".\\Rwanda datasets\\Exchange rate.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+exchange_rate = read.csv(".\\Rwanda datasets\\Exchange_rate.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
 GDP = read.csv(".\\Rwanda datasets\\GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG?locations=RW
 Inflation = read.csv(".\\Rwanda datasets\\Inflation.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/NV.AGR.TOTL.KD?locations=RW
-Agriculture_GDP = read.csv(".\\Rwanda datasets\\Agriculture GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Agriculture_GDP = read.csv(".\\Rwanda datasets\\Agriculture_GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # Source: http://rwanda.opendataforafrica.org/UNCTADMTMEIWCG2017/merchandise-trade-matrix-product-groups-exports-and-imports-in-thousands-of-dollars-annual-1995-2016
 Vegetables = read.csv(".\\Rwanda datasets\\Vegetables.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 Cereals = read.csv(".\\Rwanda datasets\\Cereal.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
