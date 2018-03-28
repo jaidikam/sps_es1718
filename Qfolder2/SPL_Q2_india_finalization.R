@@ -67,7 +67,3 @@ saveRDS(india_fin, (".\\Qfolder2\\Q2_india_fin.rds"))
 rm(list = setdiff(ls(), lsf.str()))
 
 
-rest = india_q[c("prod_amount"    ,      "daily_caloric_supply", "exp_sug"            ,  "exp_veg"  ,           
- "exp_cer"    ,          "imp_sug"   ,           "imp_veg"      ,        "imp_cer"   ,          
- "agri_gdp"    ,         "gni_pc"  ,             "cp_inflation"  ,       "avg_p_barrel"     ,   
- "population", "prod_price")]
