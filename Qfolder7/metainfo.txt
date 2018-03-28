@@ -1,0 +1,20 @@
+Name of Quantlet: SPL_Q7_Statistics_exploration 
+
+Published in:     'Statistical  programming  languages - Student  Project  on  "The driving factors behind food prices in developing countries'
+
+Description:      produce four plots: 
+					1) barplot_price_change: the change in the prices of each crop in each country from the previous year
+					2) population_plot: the change in the population in the studied countries over the years
+					3) price_index: the change in the average price in basic food categories in the world
+					4) production: the change of the production amount of each corp in each country and compare it to the change in the worldwide
+Keywords:         India, Rwanda, Philippines, world, population, food prices, corps production amount  
+
+Author:           Raiber Alkurdi
+
+See also:       
+
+Submitted:        Fri, March 30 2018 by Raiber Alkurdi
+
+Datafile:         Food_price_indices_data.csv, world_population.csv, world_production.csv, rwanda_fin.rds, philippines_fin.rds, india_fin.rds
+
+Output:           barplot_price_change.jpg, population_plot.jpg, price_index.jpg, production.jpg
