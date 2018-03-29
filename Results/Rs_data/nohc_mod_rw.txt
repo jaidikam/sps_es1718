@@ -1,0 +1,10 @@
+
+Call:
+lm(formula = formulanohc_rw, data = normalized_rw)
+
+Coefficients:
+ (Intercept)         pr_q1         pr_q2         pr_q3         pr_q4        tas_q1        tas_q2        tas_q3  
+  -9.625e-16     1.184e-01     9.896e-02     3.382e-02     1.007e-01     2.774e-01    -1.284e-01    -1.786e-02  
+      tas_q4   prod_amount       exp_veg       imp_veg  cp_inflation  
+   1.248e-01    -2.187e-01     1.263e-01     2.643e-01    -6.558e-02  
+

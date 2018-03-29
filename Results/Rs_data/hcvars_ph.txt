@@ -1,0 +1,2 @@
+[1] "population"           "agri_gdp"             "gni_pc"               "gdp"                  "daily_caloric_supply"
+[6] "exp_agri"             "imp_cer"              "tas_q1"              

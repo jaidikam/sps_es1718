@@ -1,0 +1,3 @@
+ [1] "prod_amount"          "agri_gdp"             "gni_pc"               "population"          
+ [5] "imp_veg"              "exp_veg"              "daily_caloric_supply" "imp_sug"             
+ [9] "cp_inflation"         "imp_cer"              "exp_sug"             
