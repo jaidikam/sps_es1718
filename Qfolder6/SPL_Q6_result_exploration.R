@@ -6,19 +6,7 @@ if(!require("ggfortify")) install.packages("ggfortify"); library("ggfortify")
 
 
 
-#function for plotting VSURF Objects
-plotVsurf = function(iVsurfOb,iStep,iCountry){
-  header_prefix = "not specified"
-  if(iStep == "thres"){
-    header_prefix = "Thresholding step"
-  }
-  if(!iStep == "thres"){
-    header_prefix = "Interpretation step"
-  }
-  
-  plot(iVsurfOb,step = iStep, var.names = FALSE,
-       nvar.interp = length(iVsurfOb$varselect.thres), main = paste(header_prefix,iCountry))
-}
+
 
 
 #loading results for correlation / VIF based variable selection
@@ -77,6 +65,20 @@ sink()
 
 #loading results for random forest based variable selection 
 india_rf_result = readRDS(".\\Qfolder5\\Q5_india_rf.rds")
+
+#function for plotting VSURF Objects
+plotVsurf = function(iVsurfOb,iStep,iCountry){
+  header_prefix = "not specified"
+  if(iStep == "thres"){
+    header_prefix = "Thresholding step"
+  }
+  if(iStep == "interp"){
+    header_prefix = "Interpretation step"
+  }
+  
+  plot(iVsurfOb,step = iStep, var.names = FALSE,
+       nvar.interp = length(iVsurfOb$varselect.thres), main = paste(header_prefix,iCountry))
+}
 
 #threshold step 
 #save variables and plot to file

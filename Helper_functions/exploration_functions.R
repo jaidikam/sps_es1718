@@ -104,7 +104,7 @@ plotVsurf = function(iVsurfOb,iStep,iCountry){
   if(iStep == "thres"){
     header_prefix = "Thresholding step"
   }
-  if(!iStep == "thres"){
+  if(iStep == "interp"){
     header_prefix = "Interpretation step"
   }
   
