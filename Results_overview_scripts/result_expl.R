@@ -67,7 +67,7 @@ sink()
 
 
 sink(".\\Results\\Rs_data\\nohc_mod_rw.txt")
-print(rwanda_nohc_vif)
+print(summary(rwanda_nohc_vif))
 sink() 
 
 sink(".\\Results\\Rs_data\\nohc_mod_ph.txt")
