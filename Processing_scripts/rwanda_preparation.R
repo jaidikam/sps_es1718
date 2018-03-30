@@ -10,32 +10,32 @@ if(!require("data.table")) install.packages("data.table");library("data.table")
 
 
 # http://www.fao.org/faostat/en/#data/PP
-data = read.csv(".\\Rwanda datasets\\Food_prices.csv", sep = ","  ,stringsAsFactors = FALSE)
+data = read.csv(".\\Common_datasets\\Rwanda_datasets\\Food_prices.csv", sep = ","  ,stringsAsFactors = FALSE)
 # temprature and rainfall data from 1991 - 2015
 #source: http://sdwebx.worldbank.org/climateportal/index.cfm?page=downscaled_data_download&menu=historical
-temp = read.csv(".\\Rwanda datasets\\Rwanda_temp.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
-rain = read.csv(".\\Rwanda datasets\\Rwanda_rainfall.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
+temp = read.csv(".\\Common_datasets\\Rwanda_datasets\\Rwanda_temp.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
+rain = read.csv(".\\Common_datasets\\Rwanda_datasets\\Rwanda_rainfall.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
 # Source: https://www.statista.com/statistics/262858/change-in-opec-crude-oil-prices-since-1960/
-oil_prices = read.csv(".\\Rwanda datasets\\Oil_prices.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
+oil_prices = read.csv(".\\Common_datasets\\Rwanda_datasets\\Oil_prices.csv", head = TRUE, sep = ";", stringsAsFactors = FALSE)
 # Source: http://www.fao.org/faostat/en/#data/OA
-population = read.csv(".\\Rwanda datasets\\Population.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+population = read.csv(".\\Common_datasets\\Rwanda_datasets\\Population.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # Source: http://www.fao.org/faostat/en/#data/OA
-Production_amount = read.csv(".\\Rwanda datasets\\Production_Amount.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Production_amount = read.csv(".\\Common_datasets\\Rwanda_datasets\\Production_Amount.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/NY.GNP.PCAP.KD?locations=RW
-GNI = read.csv(".\\Rwanda datasets\\GNI.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+GNI = read.csv(".\\Common_datasets\\Rwanda_datasets\\GNI.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # Source: http://www.fao.org/faostat/en/#data/OA
-exchange_rate = read.csv(".\\Rwanda datasets\\Exchange_rate.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+exchange_rate = read.csv(".\\Common_datasets\\Rwanda_datasets\\Exchange_rate.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
-GDP = read.csv(".\\Rwanda datasets\\GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+GDP = read.csv(".\\Common_datasets\\Rwanda_datasets\\GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG?locations=RW
-Inflation = read.csv(".\\Rwanda datasets\\Inflation.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Inflation = read.csv(".\\Common_datasets\\Rwanda_datasets\\Inflation.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # https://data.worldbank.org/indicator/NV.AGR.TOTL.KD?locations=RW
-Agriculture_GDP = read.csv(".\\Rwanda datasets\\Agriculture_GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Agriculture_GDP = read.csv(".\\Common_datasets\\Rwanda_datasets\\Agriculture_GDP.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # Source: http://rwanda.opendataforafrica.org/UNCTADMTMEIWCG2017/merchandise-trade-matrix-product-groups-exports-and-imports-in-thousands-of-dollars-annual-1995-2016
-Vegetables = read.csv(".\\Rwanda datasets\\Vegetables.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
-Cereals = read.csv(".\\Rwanda datasets\\Cereal.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Vegetables = read.csv(".\\Common_datasets\\Rwanda_datasets\\Vegetables.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+Cereals = read.csv(".\\Common_datasets\\Rwanda_datasets\\Cereal.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 # Source: https://ourworldindata.org/food-per-person
-dpccs = read.csv(".\\Rwanda datasets\\daily-per-capita-caloric-supply.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
+dpccs = read.csv(".\\Common_datasets\\Rwanda_datasets\\daily-per-capita-caloric-supply.csv", head = TRUE, sep = ",", stringsAsFactors = FALSE)
 
 
 
