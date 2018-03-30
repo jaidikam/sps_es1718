@@ -56,7 +56,7 @@ prodPlot = function(ds, area, items){
     geom_point()+
     ylim(-30, 75)+
     ggtitle(label=area)+
-    ylab(label="Normalized Production Amount") +
+    ylab(label="Percentage Production Change") +
     xlab("Year")
   return(p)
 }
