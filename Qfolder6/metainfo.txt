@@ -2,9 +2,10 @@ Name of Quantlet: SPL_Q6_result_exploration
 
 Published in:     'Statistical  programming  languages - Student  Project  on  "The driving factors behind food                        prices in developing countries'
 
-Description:      tbd
+Description:      Loads the results produced in variable selection stage and produces graphs and text files 
+                  to be stored in the files system for further usage
 
-Keywords:         tbd
+Keywords:         plot, text, presentation, file, summary
 
 Author:           Benjamin Jaidi
 
@@ -12,8 +13,8 @@ See also:         SPL_Q3_india_impvar_vif, SPL_Q4_india_impvar_lasso, SPL_Q5_ind
 
 Submitted:        Fri, March 30 2018 by Benjamin Jaidi
 
-Datafile:         Q3_insign_in.rds, Q3_mod_varnohc.rds, Q3_mod_lovif.rds, Q4_india_lasso.rds, Q5_india_rf.rds,
+Datafile:         Q3_insign_in.rds, Q3_mod_varnohc.rds, Q3_mod_lovif.rds, Q4_india_lasso.rds, Q5_india_rf.rds
 
-                  +tbd
-
-Output:           tbd
+Output:           Q6_india_corr.jpg, Q6_hcvars_in.txt, Q6_nohc_mod_in.txt, Q6_vif_mod_in.txt, Q6_india_lasso_mse.jpg
+                  Q6_lasso_vars_in.txt, Q6_rf_thres_in.txt, Q6_india_rf_thres.jpg, Q6_rf_interp_in.txt, 
+                  Q6_india_rf_interp.jpg

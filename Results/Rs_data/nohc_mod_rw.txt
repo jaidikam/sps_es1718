@@ -1,0 +1,30 @@
+
+Call:
+lm(formula = formulanohc_rw, data = normalized_rw)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.4427 -0.6418 -0.2439  0.3527  2.8037 
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  -9.625e-16  6.981e-02   0.000  1.00000   
+pr_q1         1.184e-01  8.920e-02   1.327  0.18638   
+pr_q2         9.896e-02  1.010e-01   0.980  0.32870   
+pr_q3         3.382e-02  1.008e-01   0.335  0.73769   
+pr_q4         1.007e-01  8.754e-02   1.151  0.25153   
+tas_q1        2.774e-01  1.197e-01   2.318  0.02170 * 
+tas_q2       -1.284e-01  1.192e-01  -1.077  0.28327   
+tas_q3       -1.786e-02  1.289e-01  -0.139  0.88996   
+tas_q4        1.248e-01  1.110e-01   1.125  0.26234   
+prod_amount  -2.187e-01  7.390e-02  -2.959  0.00355 **
+exp_veg       1.263e-01  1.023e-01   1.234  0.21882   
+imp_veg       2.643e-01  1.000e-01   2.643  0.00903 **
+cp_inflation -6.558e-02  8.642e-02  -0.759  0.44901   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.9235 on 162 degrees of freedom
+Multiple R-squared:  0.2059,	Adjusted R-squared:  0.1471 
+F-statistic: 3.501 on 12 and 162 DF,  p-value: 0.0001285
+

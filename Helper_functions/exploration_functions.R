@@ -97,3 +97,17 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
     }
   }
 }
+
+#function for plotting VSURF Objects
+plotVsurf = function(iVsurfOb,iStep,iCountry){
+  header_prefix = "not specified"
+  if(iStep == "thres"){
+    header_prefix = "Thresholding step"
+  }
+  if(iStep == "interp"){
+    header_prefix = "Interpretation step"
+  }
+  
+  plot(iVsurfOb,step = iStep, var.names = FALSE,
+       nvar.interp = length(iVsurfOb$varselect.thres), main = paste(header_prefix,iCountry))
+}

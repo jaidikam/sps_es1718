@@ -1,0 +1,2 @@
+[1] "prod_amount"          "imp_cer"              "exp_veg"              "agri_gdp"             "gni_pc"              
+[6] "population"           "daily_caloric_supply" "exp_cer"              "avg_p_barrel"        

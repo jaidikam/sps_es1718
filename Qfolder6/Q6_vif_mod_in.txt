@@ -1,0 +1,33 @@
+
+Call:
+lm(formula = formula_lovif_in, data = normalized_in)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.66068 -0.22061  0.02824  0.20910  0.67543 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)    
+(Intercept)           4.086e-15  5.001e-02   0.000   1.0000    
+population            1.406e+00  6.424e-01   2.188   0.0359 *  
+daily_caloric_supply -4.904e-01  1.009e+00  -0.486   0.6301    
+exp_sug               2.409e+00  2.542e+00   0.948   0.3501    
+avg_p_barrel         -3.990e-01  8.399e-01  -0.475   0.6379    
+pr_q1                -2.760e-01  1.690e-01  -1.634   0.1118    
+pr_q2                -5.542e-01  5.531e-01  -1.002   0.3236    
+pr_q3                -1.183e+00  1.047e+00  -1.130   0.2667    
+pr_q4                 1.309e+00  1.117e+00   1.172   0.2494    
+tas_q2               -2.571e-01  5.917e-01  -0.435   0.6667    
+tas_q3                2.025e-02  2.900e-01   0.070   0.9448    
+tas_q4               -1.637e-01  2.401e-01  -0.682   0.5001    
+prod_amount           6.335e-01  5.101e-02  12.418 5.51e-14 ***
+exp_cer              -9.570e-01  8.724e-01  -1.097   0.2806    
+imp_cer               8.959e-01  8.992e-01   0.996   0.3264    
+cp_inflation         -2.064e-01  6.713e-01  -0.307   0.7604    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.35 on 33 degrees of freedom
+Multiple R-squared:  0.9158,	Adjusted R-squared:  0.8775 
+F-statistic: 23.92 on 15 and 33 DF,  p-value: 1.758e-13
+
