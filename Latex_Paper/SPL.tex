@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 
 
-
+\usepackage{lmodern}
 \usepackage[normalem]{ulem}
 \useunder{\uline}{\ul}{}
 \usepackage{graphicx}
@@ -806,18 +806,22 @@ mod_lovif_in = lm(formula_lovif_in,data = normalized_in)
 \end{lstlisting}
 
 The function takes a dataframe containing explanatory variables and a cutoff value that specifies the highest admissible VIF until the function stops removing variables. The r package “fmsb” is required.
-The function’s algorithm in pseudocode:\\
-insert pseudocode from presentation
+
+The first loop iterates through each explanatory variable and regresses them on the remaining variables
+to obtain its VIF. Subseqently the while loops conducts the following steps until no more variables with
+VIF > threshold value remain:
+
+1.Remove the variable with highest VIF
+2.In the inner for loop iteratively calculate VIF for remaining variables
 
 Finally, the function returns a dataframe containing the remaining variables and their VIF values
 
-The function is applied to all the highly pair-wise correlated variables identified in line xx as well as to the remaining variables in a separate call. The linear model is then constructed from the remaining predictors and saved as a file.
+The function is applied to all the highly pair-wise correlated variables identified  as well as to the remaining less correlated variables in a separate call. The linear model is then constructed from the remaining predictors and saved as a file.
 
 \subsubsection{Lasso based method}
 
-Lasso (Least Absolute Shrinkage and Selection Operator) is a regression based method for regularization and feature selection .A constraint is put on the absolute sum of model parameters and a penalty is applied to the regression coefficients. The strength of the penalty is defined by the parameter lambda. The bigger lambda gets, the sooner model parameters exceed the threshold value and get dropped from the model. Intuitively, a smaller lambda causes more parameters to stay in the model. Lambda = 0 means there is no penalty at all and the regression becomes an ordinary least square regression
-Formulation by(Bühlmann \& Van de Geer 2010); // Statistics for High-Dimensional Data: Methods, Theory and Applications.
-Springer 2011 in Literaturverzeichnis und referenzieren
+Lasso (Least Absolute Shrinkage and Selection Operator) is a regression based method for regularization and feature selection. A constraint is put on the absolute sum of model parameters and a penalty is applied to the regression coefficients. The strength of the penalty is defined by the parameter lambda. The bigger lambda gets, the sooner model parameters exceed the threshold value and get dropped from the model. Intuitively, a smaller lambda causes more parameters to stay in the model. Lambda = 0 means there is no penalty at all and the regression becomes an ordinary least square regression
+Formulation by(Bühlmann \& Van de Geer 2010).
 
 Find a solution to the optimization problem 
 minimize 
@@ -885,8 +889,8 @@ india_lasso_result = impVarsLasso(india,"prod_price")
 The function takes a dataframe as input and allows the user to specify the column holding the target variable by passing the name as a string.
 In line 21 a glmnet model is built, applying the aforementioned lasso method.
 Then a fitted model is built in the same way. The mean square error of each model for every lambda is calculated using three-fold cross validation for better generalization of the results, i.e. to avoid overfitting.
-In the following step the coefficients and variable names from the model with the lowest MSE are stored in a dataframe called mincoefs. In order to offer additional information about the correct color when the results are plotted, the variables names are ordered in the decreasing order they appear in when lambda is minimal, i.e. when their curves would cut the right margin of the plot (line 38). If coefficients in mincoeffs are greater 0, they will be displayed in green in the graph, lower 0 in red, all other will be grey.
-Finally, the model, fitted model and the display information are stored in a list which is the returned
+In the following step the coefficients and variable names from the model with the lowest MSE are stored in a dataframe called mincoefs. In order to offer additional information about the correct color when the results are plotted, the variables names are ordered in the decreasing order they appear in when lambda is minimal, i.e. when their curves would cut the right margin of the plot. If coefficients in mincoeffs are greater 0, they will be displayed in green in the graph, lower 0 in red, all other will be grey.
+Finally, the model, fitted model and the display information are stored in a list which is then returned
 
 
 
